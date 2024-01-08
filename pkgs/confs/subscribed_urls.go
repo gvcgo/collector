@@ -1,6 +1,6 @@
 package confs
 
-var Subscribers string = `https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt
+var SubscribedUrls string = `https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt
 https://raw.githubusercontent.com/ZywChannel/free/main/sub
 https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/subscribe/v2ray.txt
 https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub
@@ -32,3 +32,8 @@ https://nodefree.org/dy/{year}/{month}/{year}{month}{day}.txt
 https://hiclash.com/wp-content/uploads/{year}/{month}/{year}{month}{day}.txt
 https://wefound.cc/freenode/{year}/{month}/{year}{month}{day}.txt
 `
+
+func HandleSubscribedUrl(sUrl string, cfg *CollectorConf) (r string) {
+	r = sUrl
+	return
+}

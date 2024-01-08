@@ -11,6 +11,13 @@ import (
 	"github.com/moqsien/goutils/pkgs/koanfer"
 )
 
+const (
+	// https://cdn.jsdelivr.net
+	ToEnableJsdelivrEnvName string = "ENABLE_JS_DELIVR"
+	// proxy
+	ToEnableProxyEnvName string = "ENABLE_PROXY"
+)
+
 type StorageType int
 
 const (
@@ -58,13 +65,13 @@ func (c *CollectorConf) initiate() {
 	subPath := c.subPath()
 	if ok, _ := gutils.PathIsExist(subPath); !ok {
 		// To save default subscriber list.
-		os.WriteFile(subPath, []byte(Subscribers), os.ModePerm)
+		os.WriteFile(subPath, []byte(SubscribedUrls), os.ModePerm)
 	}
 
 	domainPath := c.domainPath()
 	if ok, _ := gutils.PathIsExist(domainPath); !ok {
 		// To save default domain list.
-		os.WriteFile(domainPath, []byte(Domains), os.ModePerm)
+		os.WriteFile(domainPath, []byte(EdDomains), os.ModePerm)
 	}
 
 	c.Load()
@@ -158,8 +165,8 @@ func (c *CollectorConf) GetDomains() (r []string) {
 		content, _ := os.ReadFile(dPath)
 		r = strings.Split(string(content), "\n")
 	} else {
-		os.WriteFile(dPath, []byte(Domains), os.ModePerm)
-		r = strings.Split(Domains, "\n")
+		os.WriteFile(dPath, []byte(EdDomains), os.ModePerm)
+		r = strings.Split(EdDomains, "\n")
 	}
 	return r
 }
@@ -172,7 +179,7 @@ func (c *CollectorConf) AddDomains(domains ...string) {
 		s := string(content) + newStr
 		os.WriteFile(dPath, []byte(s), os.ModePerm)
 	} else {
-		os.WriteFile(dPath, []byte(Domains+newStr), os.ModePerm)
+		os.WriteFile(dPath, []byte(EdDomains+newStr), os.ModePerm)
 	}
 }
 
@@ -194,8 +201,8 @@ func (c *CollectorConf) GetSubs() (r []string) {
 		content, _ := os.ReadFile(subPath)
 		r = strings.Split(string(content), "\n")
 	} else {
-		os.WriteFile(subPath, []byte(Subscribers), os.ModePerm)
-		r = strings.Split(Subscribers, "\n")
+		os.WriteFile(subPath, []byte(SubscribedUrls), os.ModePerm)
+		r = strings.Split(SubscribedUrls, "\n")
 	}
 	return r
 }
@@ -208,6 +215,6 @@ func (c *CollectorConf) AddSubs(subs ...string) {
 		s := string(content) + newStr
 		os.WriteFile(subPath, []byte(s), os.ModePerm)
 	} else {
-		os.WriteFile(subPath, []byte(Domains+newStr), os.ModePerm)
+		os.WriteFile(subPath, []byte(EdDomains+newStr), os.ModePerm)
 	}
 }

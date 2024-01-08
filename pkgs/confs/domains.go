@@ -1,9 +1,9 @@
 package confs
 
 /*
-Domains for cloudflare edgetunnel.
+EdDomains for cloudflare edgetunnel.
 */
-var Domains string = `gitlab.com
+var EdDomains string = `gitlab.com
 keywordtool.io
 texas.gov
 tomshardware.com
