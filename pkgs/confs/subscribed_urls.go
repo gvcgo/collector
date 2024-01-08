@@ -1,5 +1,13 @@
 package confs
 
+import (
+	"os"
+	"strings"
+	"time"
+
+	"github.com/gogf/gf/v2/util/gconv"
+)
+
 var SubscribedUrls string = `https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt
 https://raw.githubusercontent.com/ZywChannel/free/main/sub
 https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/subscribe/v2ray.txt
@@ -33,7 +41,31 @@ https://hiclash.com/wp-content/uploads/{year}/{month}/{year}{month}{day}.txt
 https://wefound.cc/freenode/{year}/{month}/{year}{month}{day}.txt
 `
 
+const (
+	JsdelivrUrl  string = "https://cdn.jsdelivr.net/gh/"
+	GhRawContent string = "://raw.githubusercontent.com/"
+)
+
 func HandleSubscribedUrl(sUrl string, cfg *CollectorConf) (r string) {
+	if sUrl == "" {
+		return
+	}
 	r = sUrl
+	enableJsdelivr := os.Getenv(ToEnableJsdelivrEnvName)
+	if gconv.Bool(enableJsdelivr) {
+		if strings.Contains(sUrl, GhRawContent) {
+			routeStr := strings.Split(sUrl, GhRawContent)[1]
+			routeStr = strings.ReplaceAll(routeStr, "/main", "@main")
+			routeStr = strings.ReplaceAll(routeStr, "/master", "@master")
+			r = JsdelivrUrl + routeStr
+			return
+		}
+	}
+	if strings.Contains(sUrl, "{year}") {
+		now := time.Now()
+		r = strings.ReplaceAll(sUrl, "{year}", gconv.String(now.Year()))
+		r = strings.ReplaceAll(r, "{month}", gconv.String(now.Month()))
+		r = strings.ReplaceAll(r, "{day}", gconv.String(now.Day()))
+	}
 	return
 }

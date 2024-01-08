@@ -1,6 +1,12 @@
 package sites
 
 import (
+	"os"
+	"strings"
+
+	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/moqsien/goutils/pkgs/crypt"
+	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/moqsien/goutils/pkgs/request"
 	"github.com/moqsien/proxy-collector/pkgs/confs"
 )
@@ -29,8 +35,44 @@ func (s *SubscribedVPNs) Type() SiteType {
 	return Subscribed
 }
 
-// TODO: fetch subscribed urls.
-func (s *SubscribedVPNs) fetch() {}
+// Fetches subscribed urls.
+func (s *SubscribedVPNs) fetch() {
+	if s.cnf != nil {
+		for _, sUrl := range s.cnf.GetSubs() {
+			subUrl := confs.HandleSubscribedUrl(sUrl, s.cnf)
+			if subUrl == "" {
+				continue
+			}
+			s.fetcher.SetUrl(subUrl)
+			if gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
+				s.fetcher.Proxy = s.cnf.ProxyURI
+			}
+
+			if content, statusCode := s.fetcher.GetString(); len(content) > 0 {
+				decryptedContent := crypt.DecodeBase64(content)
+				if len(decryptedContent) == 0 && len(content) > 500 && !strings.Contains(content, "</html>") {
+					// fmt.Println(content)
+					for _, encryptedContent := range strings.Split(content, "\n") {
+						decryptedContent = crypt.DecodeBase64(strings.TrimSpace(encryptedContent))
+						for _, rawUri := range strings.Split(decryptedContent, "\n") {
+							if strings.Contains(rawUri, "://") {
+								s.result = append(s.result, strings.TrimSpace(rawUri))
+							}
+						}
+					}
+				} else if len(content) > 800 && !strings.Contains(content, "</html>") {
+					for _, rawUri := range strings.Split(decryptedContent, "\n") {
+						if strings.Contains(rawUri, "://") {
+							s.result = append(s.result, strings.TrimSpace(rawUri))
+						}
+					}
+				}
+			} else {
+				gprint.PrintError("status code: %d", statusCode)
+			}
+		}
+	}
+}
 
 func (s *SubscribedVPNs) SetHandler(h func([]string)) {
 	s.handler = h

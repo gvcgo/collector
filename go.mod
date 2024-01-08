@@ -2,7 +2,10 @@ module github.com/moqsien/proxy-collector
 
 go 1.21.5
 
-require github.com/moqsien/goutils v0.7.8
+require (
+	github.com/gogf/gf/v2 v2.6.1
+	github.com/moqsien/goutils v0.7.8
+)
 
 require (
 	github.com/alexmullins/zip v0.0.0-20180717182244-4affb64b04d0 // indirect
@@ -19,7 +22,6 @@ require (
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
-	github.com/gogf/gf/v2 v2.6.1 // indirect
 	github.com/golang/snappy v0.0.2 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
