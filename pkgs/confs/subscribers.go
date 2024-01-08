@@ -30,4 +30,5 @@ https://api.subcloud.xyz/sub?target=v2ray&url=https%3A%2F%2Fcdn.statically.io%2F
 https://clashnode.com/wp-content/uploads/{year}/{month}/{year}{month}{day}.txt
 https://nodefree.org/dy/{year}/{month}/{year}{month}{day}.txt
 https://hiclash.com/wp-content/uploads/{year}/{month}/{year}{month}{day}.txt
-https://wefound.cc/freenode/{year}/{month}/{year}{month}{day}.txt`
+https://wefound.cc/freenode/{year}/{month}/{year}{month}{day}.txt
+`

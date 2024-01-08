@@ -1,5 +1,8 @@
 package confs
 
+/*
+Domains for cloudflare edgetunnel.
+*/
 var Domains string = `gitlab.com
 keywordtool.io
 texas.gov
@@ -522,4 +525,5 @@ www.4chan.org
 www.okcupid.com
 www.glassdoor.com
 www.udemy.com
-www.baipiao.eu.org`
+www.baipiao.eu.org
+`
