@@ -17,7 +17,8 @@ import (
 )
 
 const (
-	FreeFQ SiteType = "freefq"
+	FreeFQ       SiteType = "freefq"
+	DefaultProxy string   = "http://127.0.0.1:2023"
 )
 
 type FreeFQVPNs struct {
@@ -43,7 +44,11 @@ func NewFreeFQVPN(cnf *confs.CollectorConf) (fv *FreeFQVPNs) {
 		},
 		host: "https://freefq.com",
 	}
+
 	if gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
+		if fv.cnf.ProxyURI == "" {
+			fv.cnf.ProxyURI = DefaultProxy
+		}
 		fv.fetcher.Proxy = fv.cnf.ProxyURI
 	}
 	return
@@ -64,7 +69,7 @@ func (f *FreeFQVPNs) getUrl(sUrl string) (r string) {
 
 	if gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
 		if f.cnf.ProxyURI == "" {
-			f.cnf.ProxyURI = "http://127.0.0.1:2023"
+			f.cnf.ProxyURI = DefaultProxy
 		}
 		u, _ := url.Parse(f.cnf.ProxyURI)
 		c.Transport = &http.Transport{
