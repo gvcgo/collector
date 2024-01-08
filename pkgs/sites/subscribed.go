@@ -22,17 +22,24 @@ type SubscribedVPNs struct {
 	cnf     *confs.CollectorConf
 }
 
-func NewSubVPN(cfg *confs.CollectorConf) (sv *SubscribedVPNs) {
+func NewSubVPN(cnf *confs.CollectorConf) (sv *SubscribedVPNs) {
 	sv = &SubscribedVPNs{
 		result:  []string{},
-		cnf:     cfg,
+		cnf:     cnf,
 		fetcher: request.NewFetcher(),
+	}
+	if gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
+		sv.fetcher.Proxy = sv.cnf.ProxyURI
 	}
 	return
 }
 
 func (s *SubscribedVPNs) Type() SiteType {
 	return Subscribed
+}
+
+func (s *SubscribedVPNs) SetHandler(h func([]string)) {
+	s.handler = h
 }
 
 // Fetches subscribed urls.
@@ -44,10 +51,6 @@ func (s *SubscribedVPNs) fetch() {
 				continue
 			}
 			s.fetcher.SetUrl(subUrl)
-			if gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
-				s.fetcher.Proxy = s.cnf.ProxyURI
-			}
-
 			if content, statusCode := s.fetcher.GetString(); len(content) > 0 {
 				decryptedContent := crypt.DecodeBase64(content)
 				if len(decryptedContent) == 0 && len(content) > 500 && !strings.Contains(content, "</html>") {
@@ -72,10 +75,6 @@ func (s *SubscribedVPNs) fetch() {
 			}
 		}
 	}
-}
-
-func (s *SubscribedVPNs) SetHandler(h func([]string)) {
-	s.handler = h
 }
 
 func (s *SubscribedVPNs) Run() {

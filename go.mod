@@ -3,6 +3,7 @@ module github.com/moqsien/proxy-collector
 go 1.21.5
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/gogf/gf/v2 v2.6.1
 	github.com/moqsien/goutils v0.7.8
 )
@@ -10,6 +11,7 @@ require (
 require (
 	github.com/alexmullins/zip v0.0.0-20180717182244-4affb64b04d0 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/sevenzip v1.4.2 // indirect
