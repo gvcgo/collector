@@ -3,5 +3,7 @@ package sites
 type ISite interface {
 	SetHandler(handler func([]string))
 	Run()
-	// Type() string
+	Type() SiteType
 }
+
+type SiteType string
