@@ -1,15 +1,20 @@
 package sites
 
 import (
+	"bytes"
 	"crypto/tls"
 	"fmt"
 	"net/http"
+	"os"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
+	"github.com/moqsien/goutils/pkgs/request"
 	"github.com/moqsien/proxy-collector/pkgs/confs"
 )
 
@@ -117,4 +122,87 @@ func TestEDomains() {
 		fmt.Println("Total: ", len(result))
 	})
 	d.Run()
+}
+
+/*
+Collecting websites using cloudflare SSL/TSL.
+
+https://trends.builtwith.com/websitelist/Cloudflare-SSL
+*/
+type EDCollector struct {
+	startUrl string
+	result   map[string]struct{}
+	fetcher  *request.Fetcher
+	cnf      *confs.CollectorConf
+	urls     []string
+}
+
+func NewEDCollector(cnf *confs.CollectorConf) (ec *EDCollector) {
+	ec = &EDCollector{
+		cnf:      cnf,
+		result:   map[string]struct{}{},
+		fetcher:  request.NewFetcher(),
+		startUrl: "https://trends.builtwith.com/websitelist/Cloudflare-SSL",
+		urls:     []string{},
+	}
+	if gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
+		if ec.cnf.ProxyURI == "" {
+			ec.cnf.ProxyURI = DefaultProxy
+		}
+		ec.fetcher.Proxy = ec.cnf.ProxyURI
+	}
+	return
+}
+
+func (e *EDCollector) GetResult() []string {
+	r := []string{}
+	for s := range e.result {
+		r = append(r, s)
+	}
+	return r
+}
+
+func (e *EDCollector) GetWebsites() {
+	for _, sUrl := range e.urls {
+		gprint.PrintInfo("Fetch: %s", sUrl)
+		e.fetcher.SetUrl(sUrl)
+		if respStr, rCode := e.fetcher.GetString(); rCode == 200 {
+			if doc, err := goquery.NewDocumentFromReader(bytes.NewBufferString(respStr)); err == nil && doc != nil {
+				tr := doc.Find("table").Find("tr")
+				tr.Each(func(_ int, s *goquery.Selection) {
+					u := s.Find("td").First().Next().Text()
+					if u != "" && !strings.Contains(u, "...") {
+						e.result[u] = struct{}{}
+					}
+				})
+			}
+		}
+	}
+}
+
+func (e *EDCollector) Start() {
+	e.fetcher.SetUrl(e.startUrl)
+	if respStr, rCode := e.fetcher.GetString(); rCode == 200 {
+		// os.WriteFile("test.html", []byte(respStr), 0666)
+		if doc, err := goquery.NewDocumentFromReader(bytes.NewBufferString(respStr)); err == nil && doc != nil {
+			div := doc.Find("div.card-body").First()
+			div.Find("li").Find("a").Each(func(_ int, s *goquery.Selection) {
+				if u := s.AttrOr("href", ""); u != "" {
+					if strings.HasPrefix(u, "//") {
+						u = "https:" + u
+					}
+					e.urls = append(e.urls, u)
+				}
+			})
+		}
+		e.GetWebsites()
+	}
+}
+
+func TestEDCollector() {
+	cnf := &confs.CollectorConf{}
+	ec := NewEDCollector(cnf)
+	ec.Start()
+	fmt.Println(ec.GetResult())
+	fmt.Println("Total: ", len(ec.GetResult()))
 }
