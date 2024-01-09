@@ -4,7 +4,9 @@ import (
 	"crypto/tls"
 	"fmt"
 	"net/http"
+	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
@@ -19,12 +21,15 @@ type EDomains struct {
 	result  []string
 	handler func([]string)
 	cnf     *confs.CollectorConf
+	sender  chan string
+	lock    *sync.Mutex
 }
 
 func NewEDomains(cnf *confs.CollectorConf) (ed *EDomains) {
 	ed = &EDomains{
 		cnf:    cnf,
 		result: []string{},
+		lock:   &sync.Mutex{},
 	}
 	return
 }
@@ -37,40 +42,68 @@ func (e *EDomains) SetHandler(h func([]string)) {
 	e.handler = h
 }
 
-// TODO: Concurrently.
-func (e *EDomains) testDomains() {
-	for _, sUrl := range e.cnf.GetDomains() {
-		tr := &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-		client := &http.Client{
-			Transport: tr,
-			Timeout:   time.Second,
-		}
-		if !strings.HasPrefix(sUrl, "https://") {
-			sUrl = "https://" + sUrl
-		}
-		if resp, err := client.Get(sUrl); err == nil && resp != nil {
-			if len(resp.TLS.PeerCertificates) > 0 {
-				certInfo := resp.TLS.PeerCertificates[0]
-				if strings.Contains(strings.ToLower(certInfo.Subject.String()), "cloudflare") {
-					gprint.PrintSuccess(sUrl)
-					e.result = append(e.result, sUrl)
-				} else {
-					gprint.PrintInfo("No cloudflare: %s", sUrl)
-				}
+func (e *EDomains) sendDomains() {
+	e.sender = make(chan string, 100)
+	for _, d := range e.cnf.GetDomains() {
+		e.sender <- d
+	}
+	close(e.sender)
+}
+
+func (e *EDomains) domainTSL(sUrl string) {
+	if sUrl == "" {
+		return
+	}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{
+		Transport: tr,
+		Timeout:   time.Second,
+	}
+	if !strings.HasPrefix(sUrl, "https://") {
+		sUrl = "https://" + sUrl
+	}
+	if resp, err := client.Get(sUrl); err == nil && resp != nil {
+		if len(resp.TLS.PeerCertificates) > 0 {
+			certInfo := resp.TLS.PeerCertificates[0]
+			if strings.Contains(strings.ToLower(certInfo.Subject.String()), "cloudflare") {
+				gprint.PrintSuccess(sUrl)
+				e.lock.Lock()
+				e.result = append(e.result, sUrl)
+				e.lock.Unlock()
+			} else {
+				gprint.PrintInfo("No cloudflare: %s", sUrl)
 			}
-			if resp.Body != nil {
-				resp.Body.Close()
+		}
+		if resp.Body != nil {
+			resp.Body.Close()
+		}
+	} else {
+		gprint.PrintWarning("%+v", err)
+	}
+}
+
+func (e *EDomains) domains() {
+	for {
+		select {
+		case sUrl, ok := <-e.sender:
+			if sUrl == "" || !ok {
+				return
 			}
-		} else {
-			gprint.PrintWarning("%+v", err)
+			e.domainTSL(sUrl)
+		default:
+			time.Sleep(time.Millisecond * 10)
 		}
 	}
 }
 
 func (e *EDomains) Run() {
-	e.testDomains()
+	go e.sendDomains()
+	time.Sleep(time.Millisecond * 100)
+	for i := 0; i < runtime.NumCPU()*2; i++ {
+		e.domains()
+	}
 	if e.handler != nil {
 		e.handler(e.result)
 	}
