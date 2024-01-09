@@ -50,7 +50,7 @@ func (e *EDomains) SetHandler(h func([]string)) {
 
 func (e *EDomains) sendDomains() {
 	e.sender = make(chan string, 100)
-	for _, d := range e.cnf.GetDomains() {
+	for _, d := range e.cnf.GetRawDomains() {
 		e.sender <- d
 	}
 	close(e.sender)

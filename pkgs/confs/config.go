@@ -70,10 +70,10 @@ func (c *CollectorConf) initiate() {
 		os.WriteFile(subPath, []byte(SubscribedUrls), os.ModePerm)
 	}
 
-	domainPath := c.domainPath()
-	if ok, _ := gutils.PathIsExist(domainPath); !ok {
+	rawDomainPath := c.RawDomainPath()
+	if ok, _ := gutils.PathIsExist(rawDomainPath); !ok {
 		// To save default domain list.
-		os.WriteFile(domainPath, []byte(EdDomains), os.ModePerm)
+		os.WriteFile(rawDomainPath, []byte(RawEdDomains), os.ModePerm)
 	}
 
 	c.Load()
@@ -85,8 +85,16 @@ func (c *CollectorConf) subPath() string {
 	return filepath.Join(c.dirpath, SubscriberFileName)
 }
 
-func (c *CollectorConf) domainPath() string {
+func (c *CollectorConf) DomainPath() string {
 	return filepath.Join(c.dirpath, DomainFileName)
+}
+
+func (c *CollectorConf) RawDomainPath() string {
+	return filepath.Join(c.dirpath, RawDomainFileName)
+}
+
+func (c *CollectorConf) VPNFilePath() string {
+	return filepath.Join(c.dirpath, VPNFileName)
 }
 
 func (c *CollectorConf) setup() {
@@ -158,38 +166,43 @@ func (c *CollectorConf) ShowCryptoKey() {
 }
 
 // Domains for cloudflare edgetunnels.
-func (c *CollectorConf) ShowDomains() {
-	dPath := c.domainPath()
+func (c *CollectorConf) ShowRawDomains() {
+	dPath := c.RawDomainPath()
 	if ok, _ := gutils.PathIsExist(dPath); ok {
 		content, _ := os.ReadFile(dPath)
-		gprint.PrintInfo("Domain list for cloudflare edgetunnels: ")
+		gprint.PrintInfo("RawDomain list for cloudflare edgetunnels: ")
 		fmt.Println(gprint.YellowStr(string(content)))
 	} else {
-		gprint.PrintError("No domain list for edgetunnels available.")
+		gprint.PrintError("No rawDomain list for edgetunnels available.")
 	}
 }
 
-func (c *CollectorConf) GetDomains() (r []string) {
-	dPath := c.domainPath()
+func (c *CollectorConf) GetRawDomains() (r []string) {
+	dPath := c.RawDomainPath()
 	if ok, _ := gutils.PathIsExist(dPath); ok {
 		content, _ := os.ReadFile(dPath)
 		r = strings.Split(string(content), "\n")
 	} else {
-		os.WriteFile(dPath, []byte(EdDomains), os.ModePerm)
-		r = strings.Split(EdDomains, "\n")
+		os.WriteFile(dPath, []byte(RawEdDomains), os.ModePerm)
+		r = strings.Split(RawEdDomains, "\n")
 	}
 	return r
 }
 
-func (c *CollectorConf) AddDomains(domains ...string) {
-	dPath := c.domainPath()
-	newStr := strings.Join(domains, "\n")
+func (c *CollectorConf) AddRawDomains(domains ...string) {
+	dPath := c.RawDomainPath()
 	if ok, _ := gutils.PathIsExist(dPath); ok {
 		content, _ := os.ReadFile(dPath)
-		s := string(content) + newStr
-		os.WriteFile(dPath, []byte(s), os.ModePerm)
+		s := string(content)
+		toSaveList := []string{}
+		for _, d := range domains {
+			if !strings.Contains(s, d) {
+				toSaveList = append(toSaveList, d)
+			}
+		}
+		os.WriteFile(dPath, []byte(s+strings.Join(toSaveList, "\n")), os.ModePerm)
 	} else {
-		os.WriteFile(dPath, []byte(EdDomains+newStr), os.ModePerm)
+		os.WriteFile(dPath, []byte(RawEdDomains+strings.Join(domains, "\n")), os.ModePerm)
 	}
 }
 
@@ -218,13 +231,13 @@ func (c *CollectorConf) GetSubs() (r []string) {
 }
 
 func (c *CollectorConf) AddSubs(subs ...string) {
-	subPath := c.domainPath()
+	subPath := c.DomainPath()
 	newStr := strings.Join(subs, "\n")
 	if ok, _ := gutils.PathIsExist(subPath); ok {
 		content, _ := os.ReadFile(subPath)
 		s := string(content) + newStr
 		os.WriteFile(subPath, []byte(s), os.ModePerm)
 	} else {
-		os.WriteFile(subPath, []byte(EdDomains+newStr), os.ModePerm)
+		os.WriteFile(subPath, []byte(RawEdDomains+newStr), os.ModePerm)
 	}
 }
