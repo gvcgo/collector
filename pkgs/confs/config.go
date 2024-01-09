@@ -27,6 +27,7 @@ const (
 	VPNFileName        string      = "conf.txt"
 	SubscriberFileName string      = "subscribers.txt"
 	DomainFileName     string      = "domains.txt"
+	RawDomainFileName  string      = "raw_domains.txt"
 	WorkDirName        string      = ".pxycollector"
 )
 

@@ -19,7 +19,8 @@ import (
 )
 
 const (
-	EdgeDomains SiteType = "edge_domains"
+	EdgeDomains    SiteType = "edge_domains"
+	RawEdgeDomains SiteType = "raw_edge_domains"
 )
 
 type EDomains struct {
@@ -132,6 +133,7 @@ https://trends.builtwith.com/websitelist/Cloudflare-SSL
 type EDCollector struct {
 	startUrl string
 	result   map[string]struct{}
+	handler  func([]string)
 	fetcher  *request.Fetcher
 	cnf      *confs.CollectorConf
 	urls     []string
@@ -152,6 +154,14 @@ func NewEDCollector(cnf *confs.CollectorConf) (ec *EDCollector) {
 		ec.fetcher.Proxy = ec.cnf.ProxyURI
 	}
 	return
+}
+
+func (e *EDCollector) Type() SiteType {
+	return RawEdgeDomains
+}
+
+func (e *EDCollector) SetHandler(h func([]string)) {
+	e.handler = h
 }
 
 func (e *EDCollector) GetResult() []string {
@@ -180,7 +190,7 @@ func (e *EDCollector) GetWebsites() {
 	}
 }
 
-func (e *EDCollector) Start() {
+func (e *EDCollector) Run() {
 	e.fetcher.SetUrl(e.startUrl)
 	if respStr, rCode := e.fetcher.GetString(); rCode == 200 {
 		// os.WriteFile("test.html", []byte(respStr), 0666)
@@ -202,7 +212,7 @@ func (e *EDCollector) Start() {
 func TestEDCollector() {
 	cnf := &confs.CollectorConf{}
 	ec := NewEDCollector(cnf)
-	ec.Start()
+	ec.Run()
 	fmt.Println(ec.GetResult())
 	fmt.Println("Total: ", len(ec.GetResult()))
 }
