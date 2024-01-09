@@ -33,6 +33,7 @@ const (
 
 type CollectorConf struct {
 	Type      StorageType `json,koanf:"type"`
+	UserName  string      `json,koanf:"username"` // username for github or gitee.
 	Token     string      `json,koanf:"token"`
 	Repo      string      `json,koanf:"repo"`
 	CryptoKey string      `json,koanf:"crypto_key"`
@@ -101,6 +102,14 @@ func (c *CollectorConf) setup() {
 		default:
 			c.Type = StorageGithub
 		}
+
+		fmt.Println("Please enter your github/gitee username: ")
+		var username string
+		fmt.Scanln(&username)
+		if username != "" {
+			c.UserName = username
+		}
+
 		fmt.Println("Please enter your github/gitee access-token: ")
 		var token string
 		fmt.Scanln(&token)
