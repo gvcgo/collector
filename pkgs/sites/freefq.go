@@ -92,7 +92,7 @@ func (f *FreeFQVPNs) getUrl(sUrl string) (r string) {
 
 func (f *FreeFQVPNs) getUrls() (r []string) {
 	for _, sUrl := range f.urls {
-
+		gprint.PrintInfo("Getting: %s", sUrl)
 		content := f.getUrl(sUrl)
 		// fmt.Println(content)
 		if doc, err := goquery.NewDocumentFromReader(bytes.NewBufferString(content)); err == nil && doc != nil {

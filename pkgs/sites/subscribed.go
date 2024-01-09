@@ -50,6 +50,7 @@ func (s *SubscribedVPNs) fetch() {
 			if subUrl == "" {
 				continue
 			}
+			gprint.PrintInfo("Getting: %s", subUrl)
 			s.fetcher.SetUrl(subUrl)
 			if content, statusCode := s.fetcher.GetString(); len(content) > 0 {
 				decryptedContent := crypt.DecodeBase64(content)

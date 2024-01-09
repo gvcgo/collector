@@ -111,6 +111,7 @@ func (e *EDomains) Run() {
 		e.domains()
 	}
 	if e.handler != nil {
+		gprint.PrintInfo("Total: %d", len(e.result))
 		e.handler(e.result)
 	}
 }

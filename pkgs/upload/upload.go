@@ -1,10 +1,12 @@
 package upload
 
 import (
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/gogf/gf/v2/encoding/gjson"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/moqsien/goutils/pkgs/storage"
 	"github.com/moqsien/proxy-collector/pkgs/confs"
@@ -28,7 +30,7 @@ func (u *Uploader) initiate() {
 	case confs.StorageGithub:
 		if u.cnf.UserName != "" && u.cnf.Token != "" && u.cnf.Repo != "" {
 			st := storage.NewGhStorage(u.cnf.UserName, u.cnf.Token)
-			if u.cnf.ProxyURI != "" {
+			if u.cnf.ProxyURI != "" && gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
 				st.Proxy = u.cnf.ProxyURI
 			}
 			u.storage = st
