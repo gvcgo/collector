@@ -1,0 +1,4 @@
+*.txt
+.DS_Store
+pxy.exe
+pxy/pxy
