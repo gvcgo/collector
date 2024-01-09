@@ -151,7 +151,6 @@ func (s *SiteRunner) Run() {
 			s.doDomains()
 		default:
 		}
-		st.Run()
 	}
 }
 
@@ -189,7 +188,7 @@ func (s *SiteRunner) doRawDomains() {
 	if len(s.rawDomainList) == 0 {
 		return
 	}
-	s.cnf.AddRawDomains(s.domainList...)
+	s.cnf.AddRawDomains(s.rawDomainList...)
 	s.uploader.Upload(s.cnf.RawDomainPath())
 }
 
@@ -202,5 +201,4 @@ func (s *SiteRunner) doDomains() {
 	if err := os.WriteFile(fPath, []byte(content), os.ModePerm); err == nil {
 		s.uploader.Upload(fPath)
 	}
-	s.uploader.Upload(fPath)
 }

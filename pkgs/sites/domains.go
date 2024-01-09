@@ -136,7 +136,7 @@ type EDCollector struct {
 	handler  func([]string)
 	fetcher  *request.Fetcher
 	cnf      *confs.CollectorConf
-	urls     []string
+	urls     map[string]struct{}
 }
 
 func NewEDCollector(cnf *confs.CollectorConf) (ec *EDCollector) {
@@ -145,7 +145,7 @@ func NewEDCollector(cnf *confs.CollectorConf) (ec *EDCollector) {
 		result:   map[string]struct{}{},
 		fetcher:  request.NewFetcher(),
 		startUrl: "https://trends.builtwith.com/websitelist/Cloudflare-SSL",
-		urls:     []string{},
+		urls:     map[string]struct{}{},
 	}
 	if gconv.Bool(os.Getenv(confs.ToEnableProxyEnvName)) {
 		if ec.cnf.ProxyURI == "" {
@@ -173,7 +173,7 @@ func (e *EDCollector) GetResult() []string {
 }
 
 func (e *EDCollector) GetWebsites() {
-	for _, sUrl := range e.urls {
+	for sUrl := range e.urls {
 		gprint.PrintInfo("Fetch: %s", sUrl)
 		e.fetcher.SetUrl(sUrl)
 		if respStr, rCode := e.fetcher.GetString(); rCode == 200 {
@@ -201,11 +201,15 @@ func (e *EDCollector) Run() {
 					if strings.HasPrefix(u, "//") {
 						u = "https:" + u
 					}
-					e.urls = append(e.urls, u)
+					e.urls[u] = struct{}{}
 				}
 			})
 		}
 		e.GetWebsites()
+	}
+	if e.handler != nil {
+		gprint.PrintInfo("Total rawDomains: %d", len(e.GetResult()))
+		e.handler(e.GetResult())
 	}
 }
 

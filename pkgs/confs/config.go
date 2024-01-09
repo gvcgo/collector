@@ -241,3 +241,9 @@ func (c *CollectorConf) AddSubs(subs ...string) {
 		os.WriteFile(subPath, []byte(RawEdDomains+newStr), os.ModePerm)
 	}
 }
+
+func (c *CollectorConf) SetLocalProxy(pxy string) {
+	c.Load()
+	c.ProxyURI = pxy
+	c.Save()
+}

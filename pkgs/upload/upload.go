@@ -27,7 +27,11 @@ func (u *Uploader) initiate() {
 	switch u.cnf.Type {
 	case confs.StorageGithub:
 		if u.cnf.UserName != "" && u.cnf.Token != "" && u.cnf.Repo != "" {
-			u.storage = storage.NewGhStorage(u.cnf.UserName, u.cnf.Token)
+			st := storage.NewGhStorage(u.cnf.UserName, u.cnf.Token)
+			if u.cnf.ProxyURI != "" {
+				st.Proxy = u.cnf.ProxyURI
+			}
+			u.storage = st
 		}
 	case confs.StorageGitee:
 		if u.cnf.UserName != "" && u.cnf.Token != "" && u.cnf.Repo != "" {

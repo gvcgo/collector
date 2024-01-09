@@ -1,8 +1,8 @@
 package main
 
-import "github.com/moqsien/proxy-collector/pkgs/sites"
-
 func main() {
 	// sites.TestEDomains()
-	sites.TestEDCollector()
+	// sites.TestEDCollector()
+	app := NewApp()
+	app.Run()
 }
