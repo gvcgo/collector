@@ -1,5 +1,5 @@
 *.txt
 .DS_Store
 pxy.exe
-pkgs/pxy/pxy
+pkgs/pxy/pxy*
 *.html
