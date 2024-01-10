@@ -136,22 +136,25 @@ func (s *SiteRunner) Run() {
 				}
 			})
 			st.Run()
-			s.doProxy()
+			// s.doProxy()
 		case sites.RawEdgeDomains:
 			st.SetHandler(func(rr []string) {
 				s.rawDomainList = append(s.rawDomainList, rr...)
 			})
 			st.Run()
-			s.doRawDomains()
+			// s.doRawDomains()
 		case sites.EdgeDomains:
 			st.SetHandler(func(rr []string) {
 				s.domainList = append(s.domainList, rr...)
 			})
 			st.Run()
-			s.doDomains()
+			// s.doDomains()
 		default:
 		}
 	}
+	s.doProxy()
+	s.doRawDomains()
+	s.doDomains()
 }
 
 func (s *SiteRunner) doProxy() {
