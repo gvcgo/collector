@@ -5,10 +5,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/moqsien/goutils/pkgs/gtea/gprint"
 	"github.com/moqsien/goutils/pkgs/gutils"
 	"github.com/moqsien/goutils/pkgs/koanfer"
+	"github.com/moqsien/goutils/pkgs/request"
 )
 
 const (
@@ -21,14 +23,16 @@ const (
 type StorageType int
 
 const (
-	StorageGithub      StorageType = 1
-	StorageGitee       StorageType = 2
-	ConfigFileName     string      = "config.json"
-	VPNFileName        string      = "conf.txt"
-	SubscriberFileName string      = "subscribers.txt"
-	DomainFileName     string      = "domains.txt"
-	RawDomainFileName  string      = "raw_domains.txt"
-	WorkDirName        string      = ".pxycollector"
+	StorageGithub          StorageType = 1
+	StorageGitee           StorageType = 2
+	ConfigFileName         string      = "config.json"
+	VPNFileName            string      = "conf.txt"
+	SubscriberFileName     string      = "subscribers.txt"
+	DomainFileName         string      = "domains.txt"
+	CloudflareIPV4FileName string      = "cloudflare_ipv4.txt"
+	CloudflareIPV6FileName string      = "cloudflare_ipv6.txt"
+	RawDomainFileName      string      = "raw_domains.txt"
+	WorkDirName            string      = ".pxycollector"
 )
 
 type CollectorConf struct {
@@ -246,4 +250,26 @@ func (c *CollectorConf) SetLocalProxy(pxy string) {
 	c.Load()
 	c.ProxyURI = pxy
 	c.Save()
+}
+
+// Get ip range list for cloudflare.
+func (c *CollectorConf) GetCloudflareIPV4RangeList() (r []string) {
+	fPath := filepath.Join(c.dirpath, CloudflareIPV4FileName)
+	if ok, _ := gutils.PathIsExist(fPath); ok {
+		content, _ := os.ReadFile(fPath)
+		r = strings.Split(string(content), "\n")
+		if len(r) == 0 {
+			os.RemoveAll(fPath)
+		}
+		return
+	}
+
+	f := request.NewFetcher()
+	f.Timeout = 30 * time.Second
+	f.SetUrl(CloudflareIPV4RangeUrl)
+	if respStr, sCode := f.GetString(); sCode == 200 {
+		os.WriteFile(fPath, []byte(respStr), os.ModePerm)
+		r = strings.Split(respStr, "\n")
+	}
+	return
 }

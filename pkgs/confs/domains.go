@@ -3,7 +3,14 @@ package confs
 /*
 RawEdDomains for cloudflare edgetunnel.
 */
-var RawEdDomains string = `www.loreal.com
+var RawEdDomains string = `stockx.com
+www.envato.com
+ahrefs.com
+codepen.io
+www.lyst.com
+www.bhphotovideo.com
+www.doordash.com
+www.loreal.com
 www.garmin.com
 www.lendingtree.com
 www.zendesk.com
@@ -533,3 +540,8 @@ www.glassdoor.com
 www.udemy.com
 www.baipiao.eu.org
 `
+
+const (
+	CloudflareIPV4RangeUrl string = "https://www.cloudflare.com/ips-v4/#"
+	CloudflareIPV6RangeUrl string = "https://www.cloudflare.com/ips-v6/#"
+)
