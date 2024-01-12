@@ -181,6 +181,7 @@ func NewEDCollector(cnf *confs.CollectorConf) (ec *EDCollector) {
 		startUrls: []string{
 			"https://trends.builtwith.com/websitelist/Cloudflare-CDN",
 			"https://trends.builtwith.com/websitelist/Cloudflare-SSL",
+			"https://trends.builtwith.com/websitelist/Cloudflare",
 		},
 		urls: map[string]struct{}{},
 	}
