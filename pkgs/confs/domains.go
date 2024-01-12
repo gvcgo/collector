@@ -3,7 +3,13 @@ package confs
 /*
 RawEdDomains for cloudflare edgetunnel.
 */
-var RawEdDomains string = `gitlab.com
+var RawEdDomains string = `www.loreal.com
+www.garmin.com
+www.lendingtree.com
+www.zendesk.com
+cn.iherb.com
+iherb.com
+gitlab.com
 keywordtool.io
 texas.gov
 tomshardware.com
