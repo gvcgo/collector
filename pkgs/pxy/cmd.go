@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"github.com/moqsien/goutils/pkgs/gtea/gprint"
-	"github.com/moqsien/proxy-collector/pkgs/confs"
-	"github.com/moqsien/proxy-collector/pkgs/sites"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/proxy-collector/pkgs/confs"
+	"github.com/gvcgo/proxy-collector/pkgs/sites"
 	"github.com/spf13/cobra"
 )
 

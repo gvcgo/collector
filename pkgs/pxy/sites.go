@@ -8,12 +8,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/moqsien/goutils/pkgs/crypt"
-	"github.com/moqsien/goutils/pkgs/gtea/gprint"
-	"github.com/moqsien/proxy-collector/pkgs/confs"
-	"github.com/moqsien/proxy-collector/pkgs/sites"
-	"github.com/moqsien/proxy-collector/pkgs/upload"
-	"github.com/moqsien/vpnparser/pkgs/outbound"
+	"github.com/gvcgo/goutils/pkgs/crypt"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/vpnparser/pkgs/outbound"
+	"github.com/gvcgo/proxy-collector/pkgs/confs"
+	"github.com/gvcgo/proxy-collector/pkgs/sites"
+	"github.com/gvcgo/proxy-collector/pkgs/upload"
 )
 
 func HandleQuery(rawUri string) (result string) {

@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/moqsien/goutils/pkgs/crypt"
-	"github.com/moqsien/goutils/pkgs/gtea/gprint"
-	"github.com/moqsien/goutils/pkgs/request"
-	"github.com/moqsien/proxy-collector/pkgs/confs"
+	"github.com/gvcgo/goutils/pkgs/crypt"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
+	"github.com/gvcgo/proxy-collector/pkgs/confs"
 )
 
 const (

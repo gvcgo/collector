@@ -7,9 +7,9 @@ import (
 
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/moqsien/goutils/pkgs/gtea/gprint"
-	"github.com/moqsien/goutils/pkgs/storage"
-	"github.com/moqsien/proxy-collector/pkgs/confs"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/storage"
+	"github.com/gvcgo/proxy-collector/pkgs/confs"
 )
 
 type Uploader struct {

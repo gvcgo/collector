@@ -1,12 +1,12 @@
-module github.com/moqsien/proxy-collector
+module github.com/gvcgo/proxy-collector
 
 go 1.21.5
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/gogf/gf/v2 v2.6.1
-	github.com/moqsien/goutils v0.8.0
-	github.com/moqsien/vpnparser v0.2.6
+	github.com/gvcgo/goutils v0.8.5
+	github.com/gvcgo/vpnparser v0.2.7
 	github.com/spf13/cobra v1.8.0
 )
 
@@ -33,6 +33,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/golang/snappy v0.0.2 // indirect
 	github.com/gookit/color v1.5.3 // indirect
+	github.com/gvcgo/xtractr v0.0.3 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -50,7 +51,6 @@ require (
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/moqsien/xtractr v0.0.2 // indirect
 	github.com/muesli/ansi v0.0.0-20211018074035-2e021307bc4b // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
