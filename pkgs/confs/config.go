@@ -89,6 +89,10 @@ func (c *CollectorConf) subPath() string {
 	return filepath.Join(c.dirpath, SubscriberFileName)
 }
 
+func (c *CollectorConf) DirPath() string {
+	return c.dirpath
+}
+
 func (c *CollectorConf) DomainPath() string {
 	return filepath.Join(c.dirpath, DomainFileName)
 }
