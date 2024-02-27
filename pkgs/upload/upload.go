@@ -61,3 +61,15 @@ func (u *Uploader) Upload(localFilePath string) (r []byte) {
 	shaStr := gjson.New(content).Get("sha").String()
 	return u.storage.UploadFile(u.cnf.Repo, "", localFilePath, shaStr)
 }
+
+// Get release list.
+func (u *Uploader) GetGithubReleaseList(repoName string) (r []byte) {
+	if u.storage == nil {
+		gprint.PrintError("Storage is not initialized, please check your configurations.")
+		return
+	}
+	if st, ok := u.storage.(*storage.GhStorage); ok && st != nil {
+		r = st.GetReleaseList(repoName)
+	}
+	return
+}
