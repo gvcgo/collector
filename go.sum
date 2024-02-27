@@ -201,8 +201,8 @@ github.com/grokify/html-strip-tags-go v0.0.1 h1:0fThFwLbW7P/kOiTBs03FsJSV9RM2M/Q
 github.com/grokify/html-strip-tags-go v0.0.1/go.mod h1:2Su6romC5/1VXOQMaWL2yb618ARB8iVo6/DR99A6d78=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
-github.com/gvcgo/goutils v0.8.6 h1:JZUgSom5vl1fa2UQvT4lYimFYYmxC0b67NgBuK8ifro=
-github.com/gvcgo/goutils v0.8.6/go.mod h1:g/gPJxbpSiLK0q8a1qpkaf6ec3LOcxb7jj1ekDsKqzY=
+github.com/gvcgo/goutils v0.8.7 h1:n3+H/AwXXiDGmqDcadQeG/0zbNtJCbw0gDzFavjjrLw=
+github.com/gvcgo/goutils v0.8.7/go.mod h1:g/gPJxbpSiLK0q8a1qpkaf6ec3LOcxb7jj1ekDsKqzY=
 github.com/gvcgo/vpnparser v0.2.7 h1:+uezF5c00ROSKsD6a3ysmx3BdHxzI1ICkzuWeCHDQww=
 github.com/gvcgo/vpnparser v0.2.7/go.mod h1:JQwo6gDtzYAQgO0o63FvP0db/eO+7QKy3TnTAI0o2wA=
 github.com/gvcgo/xtractr v0.0.3 h1:EtuXR2pTL1zNRShY6PcgtKHVA0264Tiyk6qMYz4dJzY=

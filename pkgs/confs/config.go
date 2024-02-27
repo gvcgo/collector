@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
 	"github.com/gvcgo/goutils/pkgs/gutils"
 	"github.com/gvcgo/goutils/pkgs/koanfer"
@@ -18,7 +19,13 @@ const (
 	ToEnableJsdelivrEnvName string = "ENABLE_JS_DELIVR"
 	// proxy
 	ToEnableProxyEnvName string = "ENABLE_PROXY"
+	// default proxy
+	DefaultProxy string = "http://127.0.0.1:2023"
 )
+
+func EnableProxyOrNot() bool {
+	return gconv.Bool(os.Getenv(ToEnableProxyEnvName))
+}
 
 type StorageType int
 

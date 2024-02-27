@@ -5,7 +5,7 @@ go 1.21.5
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/gogf/gf/v2 v2.6.1
-	github.com/gvcgo/goutils v0.8.6
+	github.com/gvcgo/goutils v0.8.7
 	github.com/gvcgo/vpnparser v0.2.7
 	github.com/spf13/cobra v1.8.0
 )
