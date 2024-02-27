@@ -1,5 +1,8 @@
 package versions
 
+/*
+collect version info for apps.
+*/
 import (
 	"os"
 
