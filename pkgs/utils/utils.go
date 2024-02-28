@@ -12,6 +12,7 @@ const (
 var ArchOSs map[string]string = map[string]string{
 	"x86-64":     "amd64",
 	"x86":        "386",
+	"i386":       "386",
 	"arm64":      "arm64",
 	"armv6":      "arm",
 	"ppc64le":    "ppc64le",
@@ -35,16 +36,19 @@ var ArchMap = map[string]string{
 	"arm32":   "arm",
 	"armv6":   "arm",
 	"ppc64le": "ppc64le",
+	"s390x":   "s390x",
 }
 
 var PlatformMap = map[string]string{
 	"macos":   MacOS,
 	"mac":     MacOS,
 	"winnt":   Windows,
+	"win":     Windows,
 	"osx":     MacOS,
 	"linux":   Linux,
 	"windows": Windows,
 	"freebsd": "freebsd",
+	"aix":     "aix",
 }
 
 func MapArchAndOS(ArchOrOS string) (result string) {
@@ -65,6 +69,9 @@ const (
 func ParseArch(name string) string {
 	name = strings.ToLower(name)
 	for k, v := range ArchMap {
+		if k == "x86" && strings.Contains(name, k) && !strings.Contains(name, "x86_64") && !strings.Contains(name, "x86-64") {
+			return v
+		}
 		if strings.Contains(name, k) {
 			return v
 		}
@@ -75,7 +82,9 @@ func ParseArch(name string) string {
 func ParsePlatform(name string) string {
 	name = strings.ToLower(name)
 	for k, v := range PlatformMap {
-		if strings.Contains(name, k) {
+		if k == "win" && strings.Contains(name, k) && !strings.Contains(name, "darwin") {
+			return v
+		} else if strings.Contains(name, k) {
 			return v
 		}
 	}
