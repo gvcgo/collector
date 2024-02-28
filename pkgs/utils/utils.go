@@ -61,3 +61,23 @@ const (
 	Bash       string = "bash"
 	PowerShell string = "powershell"
 )
+
+func ParseArch(name string) string {
+	name = strings.ToLower(name)
+	for k, v := range ArchMap {
+		if strings.Contains(name, k) {
+			return v
+		}
+	}
+	return ""
+}
+
+func ParsePlatform(name string) string {
+	name = strings.ToLower(name)
+	for k, v := range PlatformMap {
+		if strings.Contains(name, k) {
+			return v
+		}
+	}
+	return ""
+}

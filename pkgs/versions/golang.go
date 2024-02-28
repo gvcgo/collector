@@ -17,6 +17,10 @@ import (
 	"github.com/gvcgo/proxy-collector/pkgs/utils"
 )
 
+const (
+	GoVersionFileName string = "golang.version.json"
+)
+
 /*
 https://golang.google.cn/dl/
 https://go.dev/dl/
@@ -24,7 +28,7 @@ https://go.dev/dl/
 type Golang struct {
 	cnf       *confs.CollectorConf
 	uploader  *upload.Uploader
-	vList     []*Version
+	versions  Versions
 	fetcher   *request.Fetcher
 	homepage  string
 	doc       *goquery.Document
@@ -34,7 +38,7 @@ type Golang struct {
 func NewGolang(cnf *confs.CollectorConf) (g *Golang) {
 	g = &Golang{
 		cnf:      cnf,
-		vList:    []*Version{},
+		versions: Versions{},
 		fetcher:  request.NewFetcher(),
 		homepage: "https://go.dev/dl/",
 	}
@@ -92,15 +96,21 @@ func (g *Golang) findPackages(table *goquery.Selection, vTagName string) {
 		if k := strings.ToLower(strings.ToLower(td.Eq(1).Text())); k != "archive" {
 			return
 		}
-		ver := &Version{
-			Tag:     vTagName,
+
+		ver := &VFile{
 			Url:     href,
 			Arch:    utils.MapArchAndOS(td.Eq(3).Text()),
 			Os:      utils.MapArchAndOS(td.Eq(2).Text()),
 			Sum:     td.Eq(5).Text(),
 			SumType: sType,
 		}
-		g.vList = append(g.vList, ver)
+		if ver.Arch == "bootstrap" && vTagName == "1" {
+			ver.Os = ver.Arch
+		}
+		if vfiles, ok := g.versions[vTagName]; !ok || vfiles == nil {
+			g.versions[vTagName] = []*VFile{}
+		}
+		g.versions[vTagName] = append(g.versions[vTagName], ver)
 	})
 }
 
@@ -153,9 +163,9 @@ func (g *Golang) FetchAll() {
 }
 
 func (g *Golang) Upload() {
-	if len(g.vList) > 0 {
-		fPath := filepath.Join(g.cnf.DirPath(), "golang.json")
-		if content, err := json.MarshalIndent(g.vList, "", "  "); err == nil && content != nil {
+	if len(g.versions) > 0 {
+		fPath := filepath.Join(g.cnf.DirPath(), GoVersionFileName)
+		if content, err := json.MarshalIndent(g.versions, "", "  "); err == nil && content != nil {
 			os.WriteFile(fPath, content, os.ModePerm)
 			g.uploader.Upload(fPath)
 		}

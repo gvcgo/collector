@@ -14,7 +14,11 @@ func main() {
 	// app.Run()
 
 	cfg := confs.NewCollectorConf()
-	gl := versions.NewGolang(cfg)
-	gl.FetchAll()
-	gl.Upload()
+	// gl := versions.NewGolang(cfg)
+	// gl.FetchAll()
+	// gl.Upload()
+
+	jdk := versions.NewJDK(cfg)
+	jdk.FetchAll()
+	jdk.Upload()
 }
