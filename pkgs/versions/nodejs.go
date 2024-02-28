@@ -76,7 +76,7 @@ func (n *Nodejs) getVersion(vItem *Item) {
 	n.fetcher.SetUrl(fmt.Sprintf(NodeSumUrlPattern, vItem.Version))
 	n.fetcher.Timeout = 30 * time.Second
 	content, _ := n.fetcher.GetString()
-	os.WriteFile("test.txt", []byte(content), os.ModePerm)
+	// os.WriteFile("test.txt", []byte(content), os.ModePerm)
 
 	for _, line := range strings.Split(content, "\n") {
 		if strings.Contains(line, ".tar.gz") || strings.Contains(line, ".zip") {

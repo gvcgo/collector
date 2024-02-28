@@ -13,6 +13,7 @@ var ArchOSs map[string]string = map[string]string{
 	"x86-64":     "amd64",
 	"x86":        "386",
 	"i386":       "386",
+	"i686":       "386",
 	"arm64":      "arm64",
 	"armv6":      "arm",
 	"ppc64le":    "ppc64le",

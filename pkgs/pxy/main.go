@@ -37,7 +37,11 @@ func main() {
 	// node.FetchAll()
 	// node.Upload()
 
-	zig := versions.NewZig(cfg)
-	zig.FetchAll()
-	zig.Upload()
+	// zig := versions.NewZig(cfg)
+	// zig.FetchAll()
+	// zig.Upload()
+
+	julia := versions.NewJulia(cfg)
+	julia.FetchAll()
+	julia.Upload()
 }
