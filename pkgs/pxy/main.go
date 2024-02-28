@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/gvcgo/proxy-collector/pkgs/confs"
 	"github.com/gvcgo/proxy-collector/pkgs/versions"
 )
@@ -24,8 +22,12 @@ func main() {
 	// jdk.FetchAll()
 	// jdk.Upload()
 
-	os.Setenv(confs.ToEnableProxyEnvName, "true")
-	gra := versions.NewGradle(cfg)
-	gra.FetchAll()
-	gra.Upload()
+	// os.Setenv(confs.ToEnableProxyEnvName, "true")
+	// gra := versions.NewGradle(cfg)
+	// gra.FetchAll()
+	// gra.Upload()
+
+	maven := versions.NewMaven(cfg)
+	maven.FetchAll()
+	maven.Upload()
 }
