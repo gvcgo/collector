@@ -17,4 +17,5 @@ parse release list from github.
 8. v-analyzer
 9. zls
 10. typst-analyzer
+11. bun
 */
