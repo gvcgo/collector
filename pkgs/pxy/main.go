@@ -41,7 +41,11 @@ func main() {
 	// zig.FetchAll()
 	// zig.Upload()
 
-	julia := versions.NewJulia(cfg)
-	julia.FetchAll()
-	julia.Upload()
+	// julia := versions.NewJulia(cfg)
+	// julia.FetchAll()
+	// julia.Upload()
+
+	flutter := versions.NewFlutter(cfg)
+	flutter.FetchAll()
+	flutter.Upload()
 }

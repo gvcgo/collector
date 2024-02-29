@@ -2,12 +2,17 @@ package versions
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
+	"net/url"
 	"os"
 	"path/filepath"
 
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
 	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/proxy-collector/pkgs/confs"
 	"github.com/gvcgo/proxy-collector/pkgs/upload"
+	"github.com/gvcgo/proxy-collector/pkgs/utils"
 )
 
 const (
@@ -61,7 +66,39 @@ func NewFlutter(cnf *confs.CollectorConf) (f *Flutter) {
 }
 
 func (f *Flutter) GetVersions() {
-
+	platforms := []string{"linux", "macos", "windows"}
+	for _, platform := range platforms {
+		f.fetcher.SetUrl(fmt.Sprintf(f.homepage, platform))
+		if resp := f.fetcher.Get(); resp != nil {
+			versionList := FVersions{}
+			content, _ := io.ReadAll(resp.RawBody())
+			if err := json.Unmarshal(content, &versionList); err != nil {
+				gprint.PrintError(fmt.Sprintf("Parse content from %s failed.", f.fetcher.Url))
+				continue
+			}
+			if len(versionList.Releases) > 0 {
+			INNER:
+				for _, rr := range versionList.Releases {
+					ver := &VFile{}
+					ver.Os = utils.ParsePlatform(platform)
+					ver.Arch = utils.ParseArch(rr.Arch)
+					if ver.Arch == "" {
+						continue INNER
+					}
+					ver.Sum = rr.Sha256
+					if ver.Sum != "" {
+						ver.SumType = "sha256"
+					}
+					ver.Url, _ = url.JoinPath(versionList.BaseUrl, rr.Uri)
+					ver.Extra = rr.Stable
+					if vlist, ok := f.versions[rr.Version]; !ok || vlist == nil {
+						f.versions[rr.Version] = []*VFile{}
+					}
+					f.versions[rr.Version] = append(f.versions[rr.Version], ver)
+				}
+			}
+		}
+	}
 }
 
 func (f *Flutter) FetchAll() {

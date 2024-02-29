@@ -73,7 +73,7 @@ func (z *Zig) GetVersions() {
 			// 	return
 			// }
 			// fmt.Println(vName)
-			z.doc.Find("table").Eq(i - 1).Find("tr").Each(func(_ int, ss *goquery.Selection) {
+			z.doc.Find("table").Eq(i).Find("tr").Each(func(_ int, ss *goquery.Selection) {
 				thStr := strings.ToLower(strings.TrimSpace(ss.Find("th").Text()))
 				tdList := ss.Find("td").Nodes
 				if thStr == "os" || len(tdList) < 4 {
