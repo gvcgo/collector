@@ -69,10 +69,10 @@ func (z *Zig) GetVersions() {
 	if z.doc != nil {
 		z.doc.Find("h2").Each(func(i int, s *goquery.Selection) {
 			vName := strings.TrimSpace(s.Text())
-			if vName == "master" {
-				return
-			}
-			fmt.Println(vName)
+			// if vName == "master" {
+			// 	return
+			// }
+			// fmt.Println(vName)
 			z.doc.Find("table").Eq(i - 1).Find("tr").Each(func(_ int, ss *goquery.Selection) {
 				thStr := strings.ToLower(strings.TrimSpace(ss.Find("th").Text()))
 				tdList := ss.Find("td").Nodes

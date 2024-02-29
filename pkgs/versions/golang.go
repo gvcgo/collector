@@ -38,6 +38,7 @@ type Golang struct {
 func NewGolang(cnf *confs.CollectorConf) (g *Golang) {
 	g = &Golang{
 		cnf:      cnf,
+		uploader: upload.NewUploader(cnf),
 		versions: Versions{},
 		fetcher:  request.NewFetcher(),
 		homepage: "https://go.dev/dl/",
@@ -45,7 +46,6 @@ func NewGolang(cnf *confs.CollectorConf) (g *Golang) {
 	if UseCNSource() {
 		g.homepage = "https://golang.google.cn/dl/"
 	}
-	g.uploader = upload.NewUploader(cnf)
 	if confs.EnableProxyOrNot() {
 		pxy := g.cnf.ProxyURI
 		if pxy == "" {
