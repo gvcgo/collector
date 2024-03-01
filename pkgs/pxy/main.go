@@ -45,7 +45,11 @@ func main() {
 	// julia.FetchAll()
 	// julia.Upload()
 
-	flutter := versions.NewFlutter(cfg)
-	flutter.FetchAll()
-	flutter.Upload()
+	// flutter := versions.NewFlutter(cfg)
+	// flutter.FetchAll()
+	// flutter.Upload()
+
+	py := versions.NewPython(cfg)
+	py.FetchAll()
+	py.Upload()
 }
