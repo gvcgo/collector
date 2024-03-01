@@ -62,6 +62,7 @@ func filterByUrl(dUrl string) bool {
 		".appimage",
 		".zsync",
 		"archive/refs",
+		"msi",
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {
