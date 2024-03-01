@@ -33,7 +33,7 @@ https://forge.rust-lang.org/infra/other-installation-methods.html
 5. VSCode
 https://code.visualstudio.com/sha?build=stable
 
-6. pyenv & pyenv-win
-https://github.com/pyenv/pyenv
-https://github.com/pyenv-win/pyenv-win
+6. miniconda
+https://anaconda.org.cn/anaconda/install/silent-mode/
+https://repo.anaconda.com/miniconda/
 */
