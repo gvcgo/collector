@@ -16,6 +16,8 @@ func main() {
 	// app.Run()
 
 	cfg := confs.NewCollectorConf()
+	os.Setenv(confs.ToEnableProxyEnvName, "true")
+
 	// gl := versions.NewGolang(cfg)
 	// gl.FetchAll()
 	// gl.Upload()
@@ -24,7 +26,6 @@ func main() {
 	// jdk.FetchAll()
 	// jdk.Upload()
 
-	os.Setenv(confs.ToEnableProxyEnvName, "true")
 	// gra := versions.NewGradle(cfg)
 	// gra.FetchAll()
 	// gra.Upload()
@@ -54,5 +55,6 @@ func main() {
 	// py.Upload()
 
 	php := versions.NewPhP(cfg)
-	php.GetWindowsVersions()
+	php.FetchAll()
+	php.Upload()
 }
