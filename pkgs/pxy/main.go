@@ -49,7 +49,10 @@ func main() {
 	// flutter.FetchAll()
 	// flutter.Upload()
 
-	py := versions.NewPython(cfg)
-	py.FetchAll()
-	py.Upload()
+	// py := versions.NewPython(cfg)
+	// py.FetchAll()
+	// py.Upload()
+
+	php := versions.NewPhP(cfg)
+	php.GetWindowsVersions()
 }
