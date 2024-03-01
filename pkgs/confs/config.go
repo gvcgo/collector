@@ -39,6 +39,7 @@ const (
 	CloudflareIPV4FileName string      = "cloudflare_ipv4.txt"
 	CloudflareIPV6FileName string      = "cloudflare_ipv6.txt"
 	RawDomainFileName      string      = "raw_domains.txt"
+	GithubVersionRepoFile  string      = "github_repo_version.txt"
 	WorkDirName            string      = ".pxycollector"
 )
 
@@ -87,6 +88,12 @@ func (c *CollectorConf) initiate() {
 		os.WriteFile(rawDomainPath, []byte(RawEdDomains), os.ModePerm)
 	}
 
+	githubRepoFPath := c.GithubRepoFilePath()
+	if ok, _ := gutils.PathIsExist(githubRepoFPath); !ok {
+		// To save default github repo list.
+		os.WriteFile(githubRepoFPath, []byte(ProjectsFromGithub), os.ModePerm)
+	}
+
 	c.Load()
 	// Setup configs for collector.
 	c.setup()
@@ -110,6 +117,10 @@ func (c *CollectorConf) RawDomainPath() string {
 
 func (c *CollectorConf) VPNFilePath() string {
 	return filepath.Join(c.dirpath, VPNFileName)
+}
+
+func (c *CollectorConf) GithubRepoFilePath() string {
+	return filepath.Join(c.dirpath, GithubVersionRepoFile)
 }
 
 func (c *CollectorConf) setup() {
@@ -282,5 +293,23 @@ func (c *CollectorConf) GetCloudflareIPV4RangeList() (r []string) {
 		os.WriteFile(fPath, []byte(respStr), os.ModePerm)
 		r = strings.Split(respStr, "\n")
 	}
+	return
+}
+
+// Add github repo for version list.
+func (c *CollectorConf) AddGithubRepo(repo ...string) {
+	fPath := c.GithubRepoFilePath()
+	data, _ := os.ReadFile(fPath)
+	s := string(data) + "\n" + strings.Join(repo, "\n")
+	os.WriteFile(fPath, []byte(s), os.ModePerm)
+}
+
+// Read github repos for version list.
+func (c *CollectorConf) ReadGithubRepos() (r []string) {
+	data, _ := os.ReadFile(c.GithubRepoFilePath())
+	if len(data) == 0 {
+		data = []byte(ProjectsFromGithub)
+	}
+	r = strings.Split(string(data), "\n")
 	return
 }
