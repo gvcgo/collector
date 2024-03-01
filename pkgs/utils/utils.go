@@ -11,6 +11,8 @@ const (
 
 var ArchOSs map[string]string = map[string]string{
 	"x86-64":     "amd64",
+	"win64":      "amd64",
+	"linux64":    "amd64",
 	"x86":        "386",
 	"i386":       "386",
 	"i686":       "386",

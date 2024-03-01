@@ -58,10 +58,14 @@ func main() {
 	// php.FetchAll()
 	// php.Upload()
 
-	ins := versions.NewInstaller(cfg)
+	// ins := versions.NewInstaller(cfg)
 	// ins.GetAndroidSDKManager()
 	// ins.GetVSCode()
 	// ins.GetMiniconda()
-	ins.FetchAll()
-	ins.Upload()
+	// ins.FetchAll()
+	// ins.Upload()
+
+	gh := versions.NewGithubRepo(cfg)
+	gh.FetchAll()
+	gh.Upload()
 }
