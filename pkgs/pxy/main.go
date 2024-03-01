@@ -54,7 +54,14 @@ func main() {
 	// py.FetchAll()
 	// py.Upload()
 
-	php := versions.NewPhP(cfg)
-	php.FetchAll()
-	php.Upload()
+	// php := versions.NewPhP(cfg)
+	// php.FetchAll()
+	// php.Upload()
+
+	ins := versions.NewInstaller(cfg)
+	// ins.GetAndroidSDKManager()
+	// ins.GetVSCode()
+	// ins.GetMiniconda()
+	ins.FetchAll()
+	ins.Upload()
 }

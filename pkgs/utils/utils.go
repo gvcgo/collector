@@ -41,6 +41,7 @@ var ArchMap = map[string]string{
 }
 
 var PlatformMap = map[string]string{
+	"macosx":  MacOS,
 	"macos":   MacOS,
 	"mac":     MacOS,
 	"winnt":   Windows,
