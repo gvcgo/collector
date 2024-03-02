@@ -11,15 +11,15 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
 	"github.com/gvcgo/collector/pkgs/utils"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
 )
 
 const (
-	InstallerVersionFileName string = "installers.version.json"
+	InstallerVersionFileNamePattern string = "%s.version.json"
 )
 
 /*
@@ -62,7 +62,7 @@ https://repo.anaconda.com/miniconda/
 type Installer struct {
 	cnf      *confs.CollectorConf
 	uploader *upload.Uploader
-	versions Versions
+	versions map[string]Versions
 	fetcher  *request.Fetcher
 	homepage string
 	doc      *goquery.Document
@@ -72,7 +72,7 @@ func NewInstaller(cnf *confs.CollectorConf) (i *Installer) {
 	i = &Installer{
 		cnf:      cnf,
 		uploader: upload.NewUploader(cnf),
-		versions: Versions{},
+		versions: make(map[string]Versions),
 		fetcher:  request.NewFetcher(),
 	}
 	if confs.EnableProxyOrNot() {
@@ -137,9 +137,12 @@ func (i *Installer) GetAndroidSDKManager() {
 			ver.Extra = fmt.Sprintf("v%s", vName)
 			name := "sdkmanager"
 			if vlist, ok := i.versions[name]; !ok || vlist == nil {
-				i.versions[name] = []*VFile{}
+				i.versions[name] = Versions{
+					vName: []*VFile{},
+				}
 			}
-			i.versions[name] = append(i.versions[name], ver)
+
+			i.versions[name][vName] = append(i.versions[name][vName], ver)
 			// fmt.Println(ver.Os, ver.Arch, ver.Url, ver.Sum, ver.SumType, ver.Extra)
 		})
 	}
@@ -153,7 +156,10 @@ func (i *Installer) GetCygwinInstaller() {
 		Os:    "windows",
 		Extra: "latest",
 	}
-	i.versions["cygwin"] = []*VFile{ver}
+	name := "cygwin"
+	i.versions[name] = Versions{
+		"latest": []*VFile{ver},
+	}
 }
 
 func (i *Installer) GetMsys2Installer() {
@@ -164,28 +170,34 @@ func (i *Installer) GetMsys2Installer() {
 		Os:    "windows",
 		Extra: "latest",
 	}
-	i.versions["msys2"] = []*VFile{ver}
+	name := "msys2"
+	i.versions[name] = Versions{
+		"latest": []*VFile{ver},
+	}
 }
 
 func (i *Installer) GetRustInstaller() {
 	name := "rust"
-	i.versions[name] = []*VFile{}
+	rVersion := "latest"
+	i.versions[name] = Versions{
+		rVersion: []*VFile{},
+	}
 
 	verUnix := &VFile{
 		Url:   "https://static.rust-lang.org/rustup/rustup-init.sh",
 		Arch:  "all",
 		Os:    "linux",
-		Extra: "latest",
+		Extra: rVersion,
 	}
-	i.versions[name] = append(i.versions[name], verUnix)
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verUnix)
 
 	verWin := &VFile{
 		Url:   "https://static.rust-lang.org/rustup/dist/i686-pc-windows-gnu/rustup-init.exe",
 		Arch:  "all",
 		Os:    "windows",
-		Extra: "latest",
+		Extra: rVersion,
 	}
-	i.versions[name] = append(i.versions[name], verWin)
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verWin)
 }
 
 type CodePlatform struct {
@@ -210,7 +222,7 @@ func (i *Installer) GetVSCode() {
 	i.fetcher.SetUrl("https://code.visualstudio.com/sha?build=stable")
 	name := "vscode"
 	content, _ := i.fetcher.GetString()
-	i.versions[name] = []*VFile{}
+	i.versions[name] = Versions{}
 
 	if content != "" {
 		products := &CodeProducts{}
@@ -226,7 +238,10 @@ func (i *Installer) GetVSCode() {
 						ver.SumType = "sha256"
 					}
 					ver.Extra = fmt.Sprintf("v%s", item.Version)
-					i.versions[name] = append(i.versions[name], ver)
+					if len(i.versions[name]) == 0 {
+						i.versions[name][item.Version] = []*VFile{}
+					}
+					i.versions[name][item.Version] = append(i.versions[name][item.Version], ver)
 					// fmt.Println(ver.Arch, ver.Os, ver.Url, ver.Sum, ver.SumType, ver.Extra)
 				}
 			}
@@ -245,7 +260,7 @@ func (i *Installer) GetMiniconda() {
 			vName  string
 		)
 		name := "miniconda"
-		i.versions[name] = []*VFile{}
+		i.versions[name] = Versions{}
 		i.doc.Find("table").Find("tr").Each(func(ii int, s *goquery.Selection) {
 			u := s.Find("td").Eq(0).Find("a").AttrOr("href", "")
 			if u == "" {
@@ -271,7 +286,10 @@ func (i *Installer) GetMiniconda() {
 					ver.SumType = "sha256"
 				}
 				ver.Extra = "latest"
-				i.versions[name] = append(i.versions[name], ver)
+				if len(i.versions[name]) == 0 {
+					i.versions[name][ver.Extra] = []*VFile{}
+				}
+				i.versions[name][ver.Extra] = append(i.versions[name][ver.Extra], ver)
 			} else {
 				if sha256Str != "" && strings.Contains(shaStr, sha256Str) && vName == "" {
 					vName = VersionPattern.FindString(fName)
@@ -279,10 +297,8 @@ func (i *Installer) GetMiniconda() {
 			}
 		})
 		if vName != "" {
-			for _, ver := range i.versions[name] {
-				ver.Extra = vName
-				// fmt.Println(ver.Arch, ver.Os, ver.Url, ver.Sum, ver.SumType, ver.Extra)
-			}
+			i.versions[name][vName] = i.versions[name]["latest"]
+			delete(i.versions[name], "latest")
 		}
 	}
 }
@@ -303,9 +319,9 @@ func (i *Installer) FetchAll() {
 }
 
 func (i *Installer) Upload() {
-	if len(i.versions) > 0 {
-		fPath := filepath.Join(i.cnf.DirPath(), InstallerVersionFileName)
-		if content, err := json.MarshalIndent(i.versions, "", "  "); err == nil && content != nil {
+	for name, versions := range i.versions {
+		fPath := filepath.Join(i.cnf.DirPath(), fmt.Sprintf(InstallerVersionFileNamePattern, name))
+		if content, err := json.MarshalIndent(versions, "", "  "); err == nil && content != nil {
 			os.WriteFile(fPath, content, os.ModePerm)
 			i.uploader.Upload(fPath)
 		}
