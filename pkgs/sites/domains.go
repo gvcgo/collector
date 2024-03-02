@@ -16,7 +16,7 @@ import (
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
 	"github.com/gvcgo/goutils/pkgs/request"
-	"github.com/gvcgo/proxy-collector/pkgs/confs"
+	"github.com/gvcgo/collector/pkgs/confs"
 )
 
 const (

@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gvcgo/proxy-collector/pkgs/confs"
-	"github.com/gvcgo/proxy-collector/pkgs/upload"
-	"github.com/gvcgo/proxy-collector/pkgs/utils"
+	"github.com/gvcgo/collector/pkgs/confs"
+	"github.com/gvcgo/collector/pkgs/upload"
+	"github.com/gvcgo/collector/pkgs/utils"
 )
 
 const (

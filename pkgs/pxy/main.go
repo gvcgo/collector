@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/gvcgo/proxy-collector/pkgs/confs"
-	"github.com/gvcgo/proxy-collector/pkgs/versions"
+	"github.com/gvcgo/collector/pkgs/confs"
+	"github.com/gvcgo/collector/pkgs/versions"
 )
 
 func main() {

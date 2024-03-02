@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/proxy-collector/pkgs/confs"
-	"github.com/gvcgo/proxy-collector/pkgs/sites"
+	"github.com/gvcgo/collector/pkgs/confs"
+	"github.com/gvcgo/collector/pkgs/sites"
 	"github.com/spf13/cobra"
 )
 

@@ -9,8 +9,8 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gvcgo/goutils/pkgs/request"
-	"github.com/gvcgo/proxy-collector/pkgs/confs"
-	"github.com/gvcgo/proxy-collector/pkgs/upload"
+	"github.com/gvcgo/collector/pkgs/confs"
+	"github.com/gvcgo/collector/pkgs/upload"
 )
 
 const (

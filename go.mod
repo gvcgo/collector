@@ -1,4 +1,4 @@
-module github.com/gvcgo/proxy-collector
+module github.com/gvcgo/collector
 
 go 1.21.5
 
