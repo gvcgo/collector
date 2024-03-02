@@ -4,19 +4,17 @@ import (
 	"os"
 
 	"github.com/gvcgo/collector/pkgs/confs"
-	"github.com/gvcgo/collector/pkgs/versions"
 )
 
 func main() {
 	// sites.TestEDomains()
 	// sites.TestEDCollector()
 	// sites.TestTDomains()
-
-	// app := NewApp()
-	// app.Run()
-
-	cfg := confs.NewCollectorConf()
 	os.Setenv(confs.ToEnableProxyEnvName, "true")
+	app := NewApp()
+	app.Run()
+
+	// cfg := confs.NewCollectorConf()
 
 	// gl := versions.NewGolang(cfg)
 	// gl.FetchAll()
@@ -65,7 +63,7 @@ func main() {
 	// ins.FetchAll()
 	// ins.Upload()
 
-	gh := versions.NewGithubRepo(cfg)
-	gh.FetchAll()
-	gh.Upload()
+	// gh := versions.NewGithubRepo(cfg)
+	// gh.FetchAll()
+	// gh.Upload()
 }

@@ -1,13 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/sites"
+	"github.com/gvcgo/collector/pkgs/versions"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
 	"github.com/spf13/cobra"
 )
+
+type IVersion interface {
+	FetchAll()
+	Upload()
+}
 
 const (
 	AppGroupID string = "proxy-collector"
@@ -148,6 +155,69 @@ func (a *App) initiate() {
 				return
 			}
 			a.cnf.SetLocalProxy(args[0])
+		},
+	})
+
+	a.rootCmd.AddCommand(&cobra.Command{
+		Use:     "version-add-repo",
+		Aliases: []string{"var"},
+		GroupID: AppGroupID,
+		Short:   "Add github repos for parsing release list.",
+		Long:    "Example: pxy var gvcgo/gvc gvcgo/collector",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				return
+			}
+			a.cnf.AddGithubRepo(args...)
+		},
+	})
+
+	a.rootCmd.AddCommand(&cobra.Command{
+		Use:     "version-fetch",
+		Aliases: []string{"vf"},
+		GroupID: AppGroupID,
+		Short:   "Get version list for gvc.",
+		Run: func(cmd *cobra.Command, args []string) {
+			verList := []IVersion{}
+			// flutter
+			fmt.Println("flutter...")
+			verList = append(verList, versions.NewFlutter(a.cnf))
+			// github
+			verList = append(verList, versions.NewGithubRepo(a.cnf))
+			// golang
+			fmt.Println("golang...")
+			verList = append(verList, versions.NewGolang(a.cnf))
+			// gradle
+			fmt.Println("gradle...")
+			verList = append(verList, versions.NewGradle(a.cnf))
+			// installers
+			verList = append(verList, versions.NewInstaller(a.cnf))
+			// java
+			fmt.Println("java...")
+			verList = append(verList, versions.NewJDK(a.cnf))
+			// julia
+			fmt.Println("julia...")
+			verList = append(verList, versions.NewJulia(a.cnf))
+			// maven
+			fmt.Println("maven...")
+			verList = append(verList, versions.NewMaven(a.cnf))
+			// nodejs
+			fmt.Println("nodejs...")
+			verList = append(verList, versions.NewNodejs(a.cnf))
+			// php
+			fmt.Println("php...")
+			verList = append(verList, versions.NewPhP(a.cnf))
+			// python
+			fmt.Println("python...")
+			verList = append(verList, versions.NewPython(a.cnf))
+			// zig
+			fmt.Println("zig...")
+			verList = append(verList, versions.NewZig(a.cnf))
+			for _, ver := range verList {
+				ver.FetchAll()
+				ver.Upload()
+			}
 		},
 	})
 }
