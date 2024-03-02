@@ -71,6 +71,8 @@ func filterByUrl(dUrl string) bool {
 		".vsix",
 		".toml",
 		".txt",
+		".d.ts",
+		"src.tar.gz",
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {
@@ -99,8 +101,8 @@ func (g *GithubRepo) fetchRepo(repo string) {
 					if !filterByUrl(ver.Url) {
 						continue ASSET
 					}
-					ver.Arch = utils.ParseArch(asset.Name)
-					ver.Os = utils.ParsePlatform(asset.Name)
+					ver.Arch = utils.ParseArch(asset.Url)
+					ver.Os = utils.ParsePlatform(asset.Url)
 					versions[item.TagName] = append(versions[item.TagName], ver)
 					// fmt.Println(ver.Arch, ver.Os, ver.Url)
 				}

@@ -13,6 +13,7 @@ https://github.com/vlang/v
 https://github.com/v-analyzer/v-analyzer
 https://github.com/oven-sh/bun
 https://github.com/junegunn/fzf
+https://github.com/denoland/deno
 */
 var ProjectsFromGithub string = `neovim/neovim
 sharkdp/fd
@@ -25,4 +26,5 @@ gerardog/gsudo
 JetBrains/kotlin
 zigtools/zls
 oven-sh/bun
-junegunn/fzf`
+junegunn/fzf
+denoland/deno`
