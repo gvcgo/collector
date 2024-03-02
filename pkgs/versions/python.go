@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
 )
 
 const (
@@ -41,19 +41,19 @@ func NewPython(cnf *confs.CollectorConf) (p *Python) {
 		fetcher:  request.NewFetcher(),
 		homepage: "https://anaconda.org/conda-forge/python/files",
 	}
-	if confs.EnableProxyOrNot() {
-		pxy := p.cnf.ProxyURI
-		if pxy == "" {
-			pxy = confs.DefaultProxy
-		}
-		p.fetcher.Proxy = pxy
-	}
+	// if confs.EnableProxyOrNot() {
+	// 	pxy := p.cnf.ProxyURI
+	// 	if pxy == "" {
+	// 		pxy = confs.DefaultProxy
+	// 	}
+	// 	p.fetcher.Proxy = pxy
+	// }
 	return
 }
 
 func (p *Python) getDoc() {
 	p.fetcher.SetUrl(p.homepage)
-	p.fetcher.Timeout = 30 * time.Second
+	p.fetcher.Timeout = 180 * time.Second
 	if resp, sCode := p.fetcher.GetString(); resp != "" && sCode == 200 {
 		// fmt.Println(resp)
 		var err error
@@ -66,7 +66,7 @@ func (p *Python) getDoc() {
 			os.Exit(1)
 		}
 	} else {
-		fmt.Println(sCode)
+		fmt.Printf("Failed: %s, code: %d", p.homepage, sCode)
 	}
 }
 

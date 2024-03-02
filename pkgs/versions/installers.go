@@ -320,6 +320,9 @@ func (i *Installer) FetchAll() {
 
 func (i *Installer) Upload() {
 	for name, versions := range i.versions {
+		if len(versions) == 0 {
+			continue
+		}
 		fPath := filepath.Join(i.cnf.DirPath(), fmt.Sprintf(InstallerVersionFileNamePattern, name))
 		if content, err := json.MarshalIndent(versions, "", "  "); err == nil && content != nil {
 			os.WriteFile(fPath, content, os.ModePerm)

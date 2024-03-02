@@ -1,16 +1,10 @@
 package main
 
-import (
-	"os"
-
-	"github.com/gvcgo/collector/pkgs/confs"
-)
-
 func main() {
 	// sites.TestEDomains()
 	// sites.TestEDCollector()
 	// sites.TestTDomains()
-	os.Setenv(confs.ToEnableProxyEnvName, "true")
+	// os.Setenv(confs.ToEnableProxyEnvName, "true")
 	app := NewApp()
 	app.Run()
 
