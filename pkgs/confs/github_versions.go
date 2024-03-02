@@ -12,6 +12,7 @@ https://github.com/nvarner/typst-lsp
 https://github.com/vlang/v
 https://github.com/v-analyzer/v-analyzer
 https://github.com/oven-sh/bun
+https://github.com/junegunn/fzf
 */
 var ProjectsFromGithub string = `neovim/neovim
 sharkdp/fd
@@ -23,4 +24,5 @@ nvarner/typst-lsp
 gerardog/gsudo
 JetBrains/kotlin
 zigtools/zls
-oven-sh/bun`
+oven-sh/bun
+junegunn/fzf`

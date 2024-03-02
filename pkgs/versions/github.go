@@ -59,10 +59,18 @@ type ReleaseItem struct {
 func filterByUrl(dUrl string) bool {
 	excludeList := []string{
 		".sha256sum",
+		".sha256",
 		".appimage",
 		".zsync",
 		"archive/refs",
-		"msi",
+		".msi",
+		".deb",
+		".json",
+		".png",
+		".md",
+		".vsix",
+		".toml",
+		".txt",
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {
@@ -108,9 +116,9 @@ func (g *GithubRepo) fetchRepo(repo string) {
 func (g *GithubRepo) FetchAll() {
 	repoList := g.cnf.ReadGithubRepos()
 	for _, repo := range repoList {
-		fmt.Printf("fetching %s ...\n", repo)
-		g.fetchRepo(repo)
-		break
+		rp := repo
+		fmt.Printf("fetching %s ...\n", rp)
+		g.fetchRepo(rp)
 	}
 }
 
@@ -119,7 +127,7 @@ func (g *GithubRepo) Upload() {
 		if len(ver) > 0 {
 			fileName := fmt.Sprintf(GithubVersionFileNamePattern, name)
 			fPath := filepath.Join(g.cnf.DirPath(), fileName)
-			if content, err := json.MarshalIndent(g.versions, "", "  "); err == nil && content != nil {
+			if content, err := json.MarshalIndent(ver, "", "  "); err == nil && content != nil {
 				os.WriteFile(fPath, content, os.ModePerm)
 				g.uploader.Upload(fPath)
 			}
