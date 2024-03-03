@@ -253,6 +253,7 @@ func (i *Installer) GetMiniconda() {
 	// https://repo.anaconda.com/miniconda/
 	i.homepage = "https://repo.anaconda.com/miniconda/"
 	i.doc = nil
+	i.fetcher.Proxy = ""
 	i.getDoc()
 	if i.doc != nil {
 		var (

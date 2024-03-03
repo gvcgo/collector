@@ -41,13 +41,13 @@ func NewPython(cnf *confs.CollectorConf) (p *Python) {
 		fetcher:  request.NewFetcher(),
 		homepage: "https://anaconda.org/conda-forge/python/files",
 	}
-	// if confs.EnableProxyOrNot() {
-	// 	pxy := p.cnf.ProxyURI
-	// 	if pxy == "" {
-	// 		pxy = confs.DefaultProxy
-	// 	}
-	// 	p.fetcher.Proxy = pxy
-	// }
+	if confs.EnableProxyOrNot() {
+		pxy := p.cnf.ProxyURI
+		if pxy == "" {
+			pxy = confs.DefaultProxy
+		}
+		p.fetcher.Proxy = pxy
+	}
 	return
 }
 

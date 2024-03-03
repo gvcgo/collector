@@ -27,4 +27,5 @@ JetBrains/kotlin
 zigtools/zls
 oven-sh/bun
 junegunn/fzf
-denoland/deno`
+denoland/deno
+git-for-windows/git`
