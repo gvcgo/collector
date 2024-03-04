@@ -5,6 +5,7 @@ collect version info for apps.
 */
 import (
 	"os"
+	"regexp"
 
 	"github.com/gogf/gf/v2/util/gconv"
 )
@@ -12,6 +13,18 @@ import (
 const (
 	UseCNSourceEnv = "PC_USE_CN_SOURCE"
 )
+
+var (
+	VersionPattern = regexp.MustCompile(`(\d+\.\d+\.\d+)`)
+)
+
+func FindVersion(s string) (vName string) {
+	vName = VersionPattern.FindString(s)
+	if vName != "" {
+		return
+	}
+	return s
+}
 
 // Uses resource from china or not.
 func UseCNSource() bool {

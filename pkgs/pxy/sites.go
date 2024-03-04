@@ -3,17 +3,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/url"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/gvcgo/goutils/pkgs/crypt"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/vpnparser/pkgs/outbound"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/sites"
 	"github.com/gvcgo/collector/pkgs/upload"
+	"github.com/gvcgo/goutils/pkgs/crypt"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/vpnparser/pkgs/outbound"
 )
 
 func HandleQuery(rawUri string) (result string) {
@@ -158,6 +159,7 @@ func (s *SiteRunner) Run() {
 }
 
 func (s *SiteRunner) doProxy() {
+
 	gprint.PrintSuccess("Total Proxies: %d", s.Result.Len())
 	gprint.PrintSuccess(
 		"vmess[%d]; vless[%d]; ss[%d]; trojan[%d]; ssr[%d]",
@@ -174,6 +176,15 @@ func (s *SiteRunner) doProxy() {
 	if s.Result.Len() <= 0 {
 		return
 	}
+	if s.Result.VlessTotal > 3000 {
+		// avoid too many items for neobox to handle.
+		gprint.Yellow("Only 3k items for vless...")
+		start := rand.Intn(s.Result.VlessTotal - 3000)
+		end := 3000 + start
+		s.Result.Vless = s.Result.Vless[start:end]
+		s.Result.VlessTotal = 3000
+	}
+
 	if content, err := json.Marshal(s.Result); err == nil {
 		gprint.PrintWarning("neobox key: %s", s.cnf.CryptoKey)
 		cc := crypt.NewCrptWithKey([]byte(s.cnf.CryptoKey))

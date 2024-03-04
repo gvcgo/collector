@@ -12,18 +12,14 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
 )
 
 const (
 	PhpVersionFileName string = "php.version.json"
-)
-
-var (
-	VersionPattern = regexp.MustCompile(`(\d+\.\d+\.\d+)`)
 )
 
 /*

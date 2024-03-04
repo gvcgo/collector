@@ -82,6 +82,10 @@ func filterByUrl(dUrl string) bool {
 	return true
 }
 
+var ToFindVersionList = []string{
+	"bun",
+}
+
 func (g *GithubRepo) fetchRepo(repo string) {
 	nList := strings.Split(repo, "/")
 	name := nList[len(nList)-1]
@@ -103,6 +107,12 @@ func (g *GithubRepo) fetchRepo(repo string) {
 					}
 					ver.Arch = utils.ParseArch(asset.Url)
 					ver.Os = utils.ParsePlatform(asset.Url)
+					for _, n := range ToFindVersionList {
+						if name == n {
+							item.TagName = FindVersion(item.TagName)
+							break
+						}
+					}
 					versions[item.TagName] = append(versions[item.TagName], ver)
 					// fmt.Println(ver.Arch, ver.Os, ver.Url)
 				}

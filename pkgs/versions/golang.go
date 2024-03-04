@@ -10,15 +10,15 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
 	"github.com/gvcgo/collector/pkgs/utils"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
 )
 
 const (
-	GoVersionFileName string = "golang.version.json"
+	GoVersionFileName string = "go.version.json"
 )
 
 /*
