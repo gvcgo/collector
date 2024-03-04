@@ -229,6 +229,9 @@ func (i *Installer) GetVSCode() {
 		if err := json.Unmarshal([]byte(content), products); err == nil {
 			for _, item := range products.Products {
 				if strings.HasSuffix(item.Url, ".zip") || strings.HasSuffix(item.Url, ".tar.gz") {
+					if strings.Contains(item.Url, "_cli") || strings.Contains(item.Url, "-stable") {
+						continue
+					}
 					ver := &VFile{}
 					ver.Url = item.Url
 					ver.Arch = utils.ParseArch(item.Url)

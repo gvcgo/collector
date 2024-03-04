@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
 )
 
 const (
@@ -103,7 +103,9 @@ func (g *Gradle) getSum(version string) (code string) {
 
 func (g *Gradle) GetVersions() {
 	g.getDoc()
-
+	if g.doc == nil {
+		return
+	}
 	g.doc.Find("div.indent").Each(func(i int, s *goquery.Selection) {
 		aLabel := s.Find("li").Eq(0).Find("a").Eq(1)
 		ver := &VFile{}

@@ -180,19 +180,20 @@ func (a *App) initiate() {
 		Short:   "Get version list for gvc.",
 		Run: func(cmd *cobra.Command, args []string) {
 			verList := []IVersion{}
+			// github
+			verList = append(verList, versions.NewGithubRepo(a.cnf))
+			// installers
+			verList = append(verList, versions.NewInstaller(a.cnf))
 			// flutter
 			fmt.Println("flutter...")
 			verList = append(verList, versions.NewFlutter(a.cnf))
-			// github
-			verList = append(verList, versions.NewGithubRepo(a.cnf))
 			// golang
 			fmt.Println("golang...")
 			verList = append(verList, versions.NewGolang(a.cnf))
 			// gradle
 			fmt.Println("gradle...")
 			verList = append(verList, versions.NewGradle(a.cnf))
-			// installers
-			verList = append(verList, versions.NewInstaller(a.cnf))
+
 			// java
 			fmt.Println("java...")
 			verList = append(verList, versions.NewJDK(a.cnf))

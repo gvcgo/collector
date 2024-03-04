@@ -82,6 +82,9 @@ const (
 
 func ParseArch(name string) string {
 	name = strings.ToLower(name)
+	if strings.Contains(name, "win32-x64") {
+		return "any"
+	}
 	for k, v := range ArchMap {
 		if k == "x86" && strings.Contains(name, k) && (strings.Contains(name, "x86_64") || strings.Contains(name, "x86-64")) {
 			continue

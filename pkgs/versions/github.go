@@ -57,6 +57,9 @@ type ReleaseItem struct {
 }
 
 func filterByUrl(dUrl string) bool {
+	if strings.Contains(dUrl, "git-for-windows/git") && !strings.Contains(dUrl, "PortableGit") {
+		return false
+	}
 	excludeList := []string{
 		".sha256sum",
 		".sha256",
@@ -73,6 +76,20 @@ func filterByUrl(dUrl string) bool {
 		".txt",
 		".d.ts",
 		"src.tar.gz",
+		"-baseline.zip",              // for bun
+		"-profile.zip",               // for bun
+		"denort-",                    // for deno
+		"-unknown-linux-musl.tar.gz", // for fd.
+		"-pc-windows-gnu.zip",        // for fd.
+		"linux-gnueabihf",            // for fd
+		"linux-musleabihf",           // for fd
+		"-musl-x86_64",               // for julia -- untested
+		"-win64.tar.gz",              // for julia
+		"-win32.tar.gz",              // for julia
+		"kotlin-compiler-",           // for kotlin
+		"Miniconda2-latest-",         // for miniconda
+		"Miniconda-latest-",          // for miniconda
+		// nodejs
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {
@@ -97,23 +114,23 @@ func (g *GithubRepo) fetchRepo(repo string) {
 		itemList := []*ReleaseItem{}
 		if err := json.Unmarshal(content, &itemList); err == nil {
 			for _, item := range itemList {
-				versions[item.TagName] = []*VFile{}
-			ASSET:
 				for _, asset := range item.Assets {
+					// if strings.Contains(item.TagName, "1.0.30") {
+					// 	fmt.Println(asset.Url, filterByUrl(asset.Url))
+					// }
 					ver := &VFile{}
 					ver.Url = asset.Url
-					if !filterByUrl(ver.Url) {
-						continue ASSET
-					}
-					ver.Arch = utils.ParseArch(asset.Url)
-					ver.Os = utils.ParsePlatform(asset.Url)
-					for _, n := range ToFindVersionList {
-						if name == n {
-							item.TagName = FindVersion(item.TagName)
-							break
+					if filterByUrl(asset.Url) {
+						ver.Arch = utils.ParseArch(asset.Url)
+						ver.Os = utils.ParsePlatform(asset.Url)
+						for _, n := range ToFindVersionList {
+							if name == n {
+								item.TagName = FindVersion(item.TagName)
+								break
+							}
 						}
+						versions[item.TagName] = append(versions[item.TagName], ver)
 					}
-					versions[item.TagName] = append(versions[item.TagName], ver)
 					// fmt.Println(ver.Arch, ver.Os, ver.Url)
 				}
 			}
@@ -128,6 +145,9 @@ func (g *GithubRepo) fetchRepo(repo string) {
 func (g *GithubRepo) FetchAll() {
 	repoList := g.cnf.ReadGithubRepos()
 	for _, repo := range repoList {
+		// if repo != "oven-sh/bun" {
+		// 	continue
+		// }
 		rp := repo
 		fmt.Printf("fetching %s ...\n", rp)
 		g.fetchRepo(rp)
