@@ -76,20 +76,22 @@ func filterByUrl(dUrl string) bool {
 		".txt",
 		".d.ts",
 		"src.tar.gz",
-		"-baseline.zip",              // for bun
-		"-profile.zip",               // for bun
-		"denort-",                    // for deno
-		"-unknown-linux-musl.tar.gz", // for fd.
-		"-pc-windows-gnu.zip",        // for fd.
-		"linux-gnueabihf",            // for fd
-		"linux-musleabihf",           // for fd
-		"-musl-x86_64",               // for julia -- untested
-		"-win64.tar.gz",              // for julia
-		"-win32.tar.gz",              // for julia
-		"kotlin-compiler-",           // for kotlin
-		"Miniconda2-latest-",         // for miniconda
-		"Miniconda-latest-",          // for miniconda
-		// nodejs
+		"-baseline.zip",                       // for bun
+		"-profile.zip",                        // for bun
+		"denort-",                             // for deno
+		"-unknown-linux-musl.tar.gz",          // for fd.
+		"-pc-windows-gnu.zip",                 // for fd.
+		"linux-gnueabihf",                     // for fd
+		"linux-musleabihf",                    // for fd
+		"kotlin-compiler-",                    // for kotlin
+		"unknown-linux-gnueabihf.",            // for ripgrep
+		"unknown-linux-musleabi.",             // for ripgrep
+		"unknown-linux-musleabihf.",           // for ripgrep
+		"pc-windows-gnu.zip",                  // for ripgrep
+		"arm-unknown-linux-gnueabihf",         // for typst-lsp
+		"typst-lsp-x86_64-unknown-linux-musl", // for typst-lsp
+		"-unknown-linux-musleabi.",            // for typst
+		"wasm32-wasi.",                        // for zls
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {

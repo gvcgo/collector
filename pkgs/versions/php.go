@@ -113,6 +113,10 @@ func (p *PhP) GetWindowsVersions() {
 			}
 			ver := &VFile{}
 			u := s.AttrOr("href", "")
+			// filter: discard Non-safe-thread version for Windows Server.
+			if strings.Contains(u, "nts-Win32") {
+				return
+			}
 			if !strings.HasPrefix(u, "https://") {
 				u, _ = url.JoinPath(baseUrl, u)
 			}

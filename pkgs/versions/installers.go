@@ -252,6 +252,21 @@ func (i *Installer) GetVSCode() {
 	}
 }
 
+func filterMinicondaByFName(fname string) bool {
+	r := false
+	toBunList := []string{
+		".pkg",
+		"Miniconda2-latest-", // for miniconda
+		"Miniconda-latest-",  // for miniconda
+	}
+	for _, b := range toBunList {
+		if strings.Contains(fname, b) {
+			return true
+		}
+	}
+	return r
+}
+
 func (i *Installer) GetMiniconda() {
 	// https://repo.anaconda.com/miniconda/
 	i.homepage = "https://repo.anaconda.com/miniconda/"
@@ -271,7 +286,10 @@ func (i *Installer) GetMiniconda() {
 				return
 			}
 			fName := s.Find("td").Eq(0).Find("a").Text()
-			if strings.HasSuffix(fName, ".pkg") {
+			// if strings.HasSuffix(fName, ".pkg") {
+			// 	return
+			// }
+			if filterMinicondaByFName(fName) {
 				return
 			}
 			sha256Str := s.Find("td").Eq(3).Text()

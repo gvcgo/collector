@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
 	"github.com/gvcgo/collector/pkgs/utils"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
 )
 
 const (
@@ -69,6 +69,22 @@ func NewJulia(cnf *confs.CollectorConf) (j *Julia) {
 	return
 }
 
+func filterJuliaByUrl(jUrl string) bool {
+	r := false
+	toBunList := []string{
+		"-musl-x86_64",  // for julia -- untested
+		"-win64.tar.gz", // for julia
+		"-win32.tar.gz", // for julia
+		".dmg",
+	}
+	for _, b := range toBunList {
+		if strings.Contains(jUrl, b) {
+			return true
+		}
+	}
+	return r
+}
+
 func (j *Julia) GetVersions() {
 	j.fetcher.SetUrl(j.homepage)
 	j.fetcher.Timeout = 180 * time.Second
@@ -87,26 +103,30 @@ func (j *Julia) GetVersions() {
 				extraStr = "stable"
 			}
 			for _, jFile := range fList.Files {
-				if jFile.Kind == "archive" && !strings.HasSuffix(jFile.Url, ".dmg") {
-					archStr := utils.ParseArch(jFile.Arch)
-					platform := utils.ParsePlatform(jFile.Os)
-					if archStr == "" || platform == "" {
-						continue
-					}
-					ver := &VFile{}
-					ver.Url = jFile.Url
-					ver.Arch = archStr
-					ver.Os = platform
-					ver.Sum = jFile.Sum
-					if ver.Sum != "" {
-						ver.SumType = "sha256"
-					}
-					ver.Extra = extraStr
-					if vlist, ok := j.versions[vName]; !ok || vlist == nil {
-						j.versions[vName] = []*VFile{}
-					}
-					j.versions[vName] = append(j.versions[vName], ver)
+				if jFile.Kind != "archive" {
+					continue
 				}
+				if filterJuliaByUrl(jFile.Url) {
+					continue
+				}
+				archStr := utils.ParseArch(jFile.Arch)
+				platform := utils.ParsePlatform(jFile.Os)
+				if archStr == "" || platform == "" {
+					continue
+				}
+				ver := &VFile{}
+				ver.Url = jFile.Url
+				ver.Arch = archStr
+				ver.Os = platform
+				ver.Sum = jFile.Sum
+				if ver.Sum != "" {
+					ver.SumType = "sha256"
+				}
+				ver.Extra = extraStr
+				if vlist, ok := j.versions[vName]; !ok || vlist == nil {
+					j.versions[vName] = []*VFile{}
+				}
+				j.versions[vName] = append(j.versions[vName], ver)
 			}
 		}
 	}

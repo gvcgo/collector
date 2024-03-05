@@ -11,11 +11,11 @@ import (
 	"time"
 
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
-	"github.com/gvcgo/goutils/pkgs/request"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
 	"github.com/gvcgo/collector/pkgs/utils"
+	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
+	"github.com/gvcgo/goutils/pkgs/request"
 )
 
 const (
@@ -83,6 +83,10 @@ func (n *Nodejs) getVersion(vItem *Item) {
 			uList := strings.Split(strings.TrimSpace(line), " ")
 			if len(uList) >= 2 {
 				fName := strings.TrimSpace(uList[len(uList)-1])
+				// filter
+				if strings.Contains(fName, "node_pdb.zip") {
+					continue
+				}
 				archStr := utils.ParseArch(fName)
 				osStr := utils.ParsePlatform(fName)
 				if archStr != "" && osStr != "" {
