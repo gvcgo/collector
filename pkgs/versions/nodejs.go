@@ -79,14 +79,13 @@ func (n *Nodejs) getVersion(vItem *Item) {
 	// os.WriteFile("test.txt", []byte(content), os.ModePerm)
 
 	for _, line := range strings.Split(content, "\n") {
+		if strings.Contains(line, "/node_pdb.zip") {
+			continue
+		}
 		if strings.Contains(line, ".tar.gz") || strings.Contains(line, ".zip") {
 			uList := strings.Split(strings.TrimSpace(line), " ")
 			if len(uList) >= 2 {
 				fName := strings.TrimSpace(uList[len(uList)-1])
-				// filter
-				if strings.Contains(fName, "node_pdb.zip") {
-					continue
-				}
 				archStr := utils.ParseArch(fName)
 				osStr := utils.ParsePlatform(fName)
 				if archStr != "" && osStr != "" {

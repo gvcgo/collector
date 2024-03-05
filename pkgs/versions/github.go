@@ -76,10 +76,10 @@ func filterByUrl(dUrl string) bool {
 		".txt",
 		".d.ts",
 		"src.tar.gz",
-		"-baseline.zip",                       // for bun
-		"-profile.zip",                        // for bun
-		"denort-",                             // for deno
-		"-unknown-linux-musl.tar.gz",          // for fd.
+		"-baseline.zip", // for bun
+		"-profile.zip",  // for bun
+		"denort-",       // for deno
+		// "-unknown-linux-musl.tar.gz",          // for fd.
 		"-pc-windows-gnu.zip",                 // for fd.
 		"linux-gnueabihf",                     // for fd
 		"linux-musleabihf",                    // for fd
