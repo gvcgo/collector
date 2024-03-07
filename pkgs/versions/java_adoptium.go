@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
 	"github.com/gvcgo/collector/pkgs/utils"
@@ -34,7 +35,7 @@ https://github.com/adoptium/temurin17-binaries/releases
 type AdoptiumJDK struct {
 	cnf      *confs.CollectorConf
 	uploader *upload.Uploader
-	versions map[string]Versions
+	versions Versions
 	jdk      *JDK
 }
 
@@ -42,7 +43,7 @@ func NewAdoptiumJDK(cnf *confs.CollectorConf) (a *AdoptiumJDK) {
 	a = &AdoptiumJDK{
 		cnf:      cnf,
 		uploader: upload.NewUploader(cnf),
-		versions: make(map[string]Versions),
+		versions: make(Versions),
 		jdk:      NewJDK(cnf),
 	}
 	return
@@ -61,28 +62,59 @@ func (a *AdoptiumJDK) GetRepoList() (r []string) {
 	return
 }
 
-func (a *AdoptiumJDK) fetchRepo(repo string) {
-	// TODO: for adoptium releases.
-	nList := strings.Split(repo, "/")
-	name := nList[len(nList)-1]
-	versions := Versions{}
+func filterJDKByUrl(dUrl string) bool {
+	if !strings.Contains(dUrl, "_hotspot_") {
+		return false
+	}
+	toBunList := []string{
+		".sig",
+		".pkg",
+		".exe",
+		".smi",
+		"debugimage",
+		"alpine",
+		"static",
+		"jre",
+	}
+	for _, b := range toBunList {
+		if strings.Contains(dUrl, b) {
+			return false
+		}
+	}
+	return true
+}
 
+func (a *AdoptiumJDK) fetchRepo(repo string) {
 	content := a.uploader.GetGithubReleaseList(repo)
 
 	if len(content) > 0 {
 		itemList := []*ReleaseItem{}
 		if err := json.Unmarshal(content, &itemList); err == nil {
+		OUTTER:
 			for _, item := range itemList {
+				if gconv.Bool(item.PreRelease) {
+					continue OUTTER
+				}
+			INNER:
 				for _, asset := range item.Assets {
-					// if strings.Contains(item.TagName, "1.0.30") {
-					// 	fmt.Println(asset.Url, filterByUrl(asset.Url))
-					// }
+					if !strings.Contains(asset.Url, "_hotspot_") {
+						continue INNER
+					}
+					if !filterJDKByUrl(asset.Url) {
+						continue INNER
+					}
 					ver := &VFile{}
 					ver.Url = asset.Url
 					if filterGithubByUrl(asset.Url) {
 						ver.Arch = utils.ParseArch(asset.Url)
 						ver.Os = utils.ParsePlatform(asset.Url)
-						versions[item.TagName] = append(versions[item.TagName], ver)
+						if ver.Os == "linux" && ver.Arch == "" {
+							continue INNER
+						}
+						if vlist, ok := a.versions[item.TagName]; !ok || vlist == nil {
+							a.versions[item.TagName] = []*VFile{}
+						}
+						a.versions[item.TagName] = append(a.versions[item.TagName], ver)
 					}
 					// fmt.Println(ver.Arch, ver.Os, ver.Url)
 				}
@@ -92,12 +124,12 @@ func (a *AdoptiumJDK) fetchRepo(repo string) {
 		}
 	}
 	// os.WriteFile("test.txt", content, os.ModePerm)
-	a.versions[name] = versions
 }
 
 func (a *AdoptiumJDK) FetchAll() {
 	repoList := a.GetRepoList()
 	for _, repo := range repoList {
+		fmt.Printf("fetching %s...\n", repo)
 		a.fetchRepo(repo)
 	}
 }

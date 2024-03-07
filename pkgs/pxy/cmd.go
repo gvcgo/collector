@@ -196,7 +196,8 @@ func (a *App) initiate() {
 
 			// java
 			fmt.Println("java...")
-			verList = append(verList, versions.NewJDK(a.cnf))
+			// verList = append(verList, versions.NewJDK(a.cnf))
+			verList = append(verList, versions.NewAdoptiumJDK(a.cnf)) // full list.
 			// julia
 			fmt.Println("julia...")
 			verList = append(verList, versions.NewJulia(a.cnf))
