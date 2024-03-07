@@ -17,10 +17,13 @@ import (
 
 /*
 https://injdk.cn/
-
 Latest versions only:
 https://www.oracle.com/cn/java/technologies/downloads/
 https://www.oracle.com/java/technologies/downloads/
+
+@@@@@@@@@@@@@@@@@@@@@
+Only latest release for each version.
+@@@@@@@@@@@@@@@@@@@@@
 
 temurin:
 https://api.adoptium.net/v3/info/available_releases

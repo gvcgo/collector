@@ -16,6 +16,17 @@ const (
 	GithubVersionFileNamePattern string = "%s.version.json"
 )
 
+type Assets struct {
+	Name string `json:"name"`
+	Url  string `json:"browser_download_url"`
+}
+
+type ReleaseItem struct {
+	Assets     []*Assets `json:"assets"`
+	TagName    string    `json:"tag_name"`
+	PreRelease any       `json:"prerelease"`
+}
+
 /*
 parse release list from github.
 
@@ -46,17 +57,7 @@ func NewGithubRepo(cnf *confs.CollectorConf) (g *GithubRepo) {
 	return
 }
 
-type Assets struct {
-	Name string `json:"name"`
-	Url  string `json:"browser_download_url"`
-}
-
-type ReleaseItem struct {
-	Assets  []*Assets `json:"assets"`
-	TagName string    `json:"tag_name"`
-}
-
-func filterByUrl(dUrl string) bool {
+func filterGithubByUrl(dUrl string) bool {
 	if strings.Contains(dUrl, "git-for-windows/git") && !strings.Contains(dUrl, "PortableGit") {
 		return false
 	}
@@ -122,7 +123,7 @@ func (g *GithubRepo) fetchRepo(repo string) {
 					// }
 					ver := &VFile{}
 					ver.Url = asset.Url
-					if filterByUrl(asset.Url) {
+					if filterGithubByUrl(asset.Url) {
 						ver.Arch = utils.ParseArch(asset.Url)
 						ver.Os = utils.ParsePlatform(asset.Url)
 						for _, n := range ToFindVersionList {
