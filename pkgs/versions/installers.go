@@ -261,12 +261,22 @@ func (i *Installer) GetVSCode() {
 		if err := json.Unmarshal([]byte(content), products); err == nil {
 			for _, item := range products.Products {
 				if strings.HasSuffix(item.Url, ".zip") || strings.HasSuffix(item.Url, ".tar.gz") {
-					if strings.Contains(item.Url, "_cli") || strings.Contains(item.Url, "-stable") {
+					if strings.Contains(item.Url, "_cli") || strings.HasSuffix(item.Url, ".deb") || strings.HasSuffix(item.Url, ".rpm") {
 						continue
 					}
 					ver := &VFile{}
 					ver.Url = item.Url
 					ver.Arch = utils.ParseArch(item.Url)
+					if strings.Contains(item.Url, "win32-arm64") {
+						ver.Arch = "arm64"
+					} else if strings.Contains(item.Url, "win32-x64") {
+						ver.Arch = "amd64"
+					} else if strings.Contains(item.Url, "universal") {
+						ver.Arch = "any"
+					} else if strings.Contains(item.Url, "VSCode-darwin.zip") {
+						ver.Arch = "amd64"
+					}
+
 					ver.Os = utils.ParsePlatform(item.Platform.PrettyName)
 					ver.Sum = item.Sum
 					if ver.Sum != "" {
