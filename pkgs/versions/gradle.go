@@ -66,7 +66,7 @@ func (g *Gradle) getDoc() {
 			if version == "" {
 				return
 			}
-			shaCode := s.Next().Find("li").Eq(0).Find("code").Text()
+			shaCode := s.Next().Find("li").Eq(1).Find("code").Text() // for gradle-all.
 			if shaCode != "" {
 				g.sha[version] = shaCode
 			}
