@@ -75,6 +75,7 @@ func filterJDKByUrl(dUrl string) bool {
 		"alpine",
 		"static",
 		"jre",
+		"testimage",
 	}
 	for _, b := range toBunList {
 		if strings.Contains(dUrl, b) {
@@ -111,6 +112,7 @@ func (a *AdoptiumJDK) fetchRepo(repo string) {
 						if ver.Os == "linux" && ver.Arch == "" {
 							continue INNER
 						}
+						item.TagName = strings.ReplaceAll(strings.TrimLeft(item.TagName, "jdk-"), "+", "_")
 						if vlist, ok := a.versions[item.TagName]; !ok || vlist == nil {
 							a.versions[item.TagName] = []*VFile{}
 						}
