@@ -177,27 +177,59 @@ func (i *Installer) GetMsys2Installer() {
 }
 
 func (i *Installer) GetRustInstaller() {
-	name := "rust"
+	name := "rustup"
 	rVersion := "latest"
 	i.versions[name] = Versions{
 		rVersion: []*VFile{},
 	}
 
-	verUnix := &VFile{
-		Url:   "https://static.rust-lang.org/rustup/rustup-init.sh",
-		Arch:  "all",
-		Os:    "linux",
+	verDarwinx64 := &VFile{
+		Url:   "https://static.rust-lang.org/rustup/dist/x86_64-apple-darwin/rustup-init",
+		Arch:  "amd64",
+		Os:    "darwin",
 		Extra: rVersion,
 	}
-	i.versions[name][rVersion] = append(i.versions[name][rVersion], verUnix)
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verDarwinx64)
 
-	verWin := &VFile{
-		Url:   "https://static.rust-lang.org/rustup/dist/i686-pc-windows-gnu/rustup-init.exe",
-		Arch:  "all",
-		Os:    "windows",
+	verDarwinArm64 := &VFile{
+		Url:   "https://static.rust-lang.org/rustup/dist/aarch64-apple-darwin/rustup-init",
+		Arch:  "arm64",
+		Os:    "darwin",
 		Extra: rVersion,
 	}
-	i.versions[name][rVersion] = append(i.versions[name][rVersion], verWin)
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verDarwinArm64)
+
+	verLinuxx64 := &VFile{
+		Url:   "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init",
+		Arch:  "amd64",
+		Os:    "darwin",
+		Extra: rVersion,
+	}
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verLinuxx64)
+
+	verLinuxArm64 := &VFile{
+		Url:   "https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init",
+		Arch:  "arm64",
+		Os:    "darwin",
+		Extra: rVersion,
+	}
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verLinuxArm64)
+
+	verWinx64 := &VFile{
+		Url:   "https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe",
+		Arch:  "amd64",
+		Os:    "darwin",
+		Extra: rVersion,
+	}
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verWinx64)
+
+	verWinArm64 := &VFile{
+		Url:   "https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe",
+		Arch:  "arm64",
+		Os:    "darwin",
+		Extra: rVersion,
+	}
+	i.versions[name][rVersion] = append(i.versions[name][rVersion], verWinArm64)
 }
 
 type CodePlatform struct {
