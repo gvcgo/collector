@@ -93,6 +93,8 @@ func filterGithubByUrl(dUrl string) bool {
 		"typst-lsp-x86_64-unknown-linux-musl", // for typst-lsp
 		"-unknown-linux-musleabi.",            // for typst
 		"wasm32-wasi.",                        // for zls
+		"debugging",                           // for PHP
+		"-PM4.",                               // for PHP
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {
@@ -109,6 +111,9 @@ var ToFindVersionList = []string{
 func (g *GithubRepo) fetchRepo(repo string) {
 	nList := strings.Split(repo, "/")
 	name := nList[len(nList)-1]
+	if strings.HasPrefix(name, "PHP-") {
+		name = "php"
+	}
 	versions := Versions{}
 
 	content := g.uploader.GetGithubReleaseList(repo)

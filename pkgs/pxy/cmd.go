@@ -207,9 +207,9 @@ func (a *App) initiate() {
 			// nodejs
 			fmt.Println("nodejs...")
 			verList = append(verList, versions.NewNodejs(a.cnf))
-			// php
-			fmt.Println("php...")
-			verList = append(verList, versions.NewPhP(a.cnf))
+			// php: see github.
+			// fmt.Println("php...")
+			// verList = append(verList, versions.NewPhP(a.cnf))
 			// python
 			fmt.Println("python...")
 			verList = append(verList, versions.NewPython(a.cnf))

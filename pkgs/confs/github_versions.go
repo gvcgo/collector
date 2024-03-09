@@ -29,4 +29,5 @@ oven-sh/bun
 junegunn/fzf
 denoland/deno
 git-for-windows/git
-protocolbuffers/protobuf`
+protocolbuffers/protobuf
+pmmp/PHP-Binaries`
