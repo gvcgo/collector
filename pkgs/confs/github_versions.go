@@ -28,4 +28,5 @@ zigtools/zls
 oven-sh/bun
 junegunn/fzf
 denoland/deno
-git-for-windows/git`
+git-for-windows/git
+protocolbuffers/protobuf`

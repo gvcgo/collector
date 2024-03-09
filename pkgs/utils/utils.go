@@ -42,12 +42,16 @@ var ArchMap = map[string]string{
 	"32-bit":    "386",
 	"arm64":     "arm64",
 	"aarch64":   "arm64",
+	"aarch_64":  "arm64",
 	"arm32":     "arm",
 	"armv6":     "arm",
 	"ppc64le":   "ppc64le",
+	"ppcle_64":  "ppc64le",
 	"s390x":     "s390x",
+	"s390_64":   "s390x",
 	"powerpc64": "ppc64",
 	"ppc64":     "ppc64",
+	"universal": "universal",
 }
 
 var PlatformMap = map[string]string{
