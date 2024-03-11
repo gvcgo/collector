@@ -30,4 +30,5 @@ junegunn/fzf
 denoland/deno
 git-for-windows/git
 protocolbuffers/protobuf
-pmmp/PHP-Binaries`
+pmmp/PHP-Binaries
+tree-sitter/tree-sitter`

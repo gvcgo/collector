@@ -95,6 +95,8 @@ func filterGithubByUrl(dUrl string) bool {
 		"wasm32-wasi.",                        // for zls
 		"debugging",                           // for PHP
 		"-PM4.",                               // for PHP
+		"tree-sitter.js",                      // for tree-sitter
+		"tree-sitter.wasm",                    // for tree-sitter
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {
