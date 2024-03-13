@@ -34,4 +34,5 @@ pmmp/PHP-Binaries
 tree-sitter/tree-sitter
 charmbracelet/vhs
 charmbracelet/glow
-gleam-lang/gleam`
+gleam-lang/gleam
+jesseduffield/lazygit`
