@@ -31,4 +31,7 @@ denoland/deno
 git-for-windows/git
 protocolbuffers/protobuf
 pmmp/PHP-Binaries
-tree-sitter/tree-sitter`
+tree-sitter/tree-sitter
+charmbracelet/vhs
+charmbracelet/glow
+gleam-lang/gleam`

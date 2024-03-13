@@ -249,6 +249,25 @@ type CodeProducts struct {
 	Products []*CodeItem `json:"products"`
 }
 
+func vscodeAllowed(item *CodeItem) bool {
+	excludeList := []string{"_cli", ".deb", ".rpm"}
+	for _, excludeStr := range excludeList {
+		if strings.Contains(item.Url, excludeStr) {
+			return false
+		}
+	}
+	if strings.HasSuffix(item.Url, ".exe") && !strings.Contains(item.Url, "User") {
+		return true
+	}
+	if strings.HasSuffix(item.Url, ".tar.gz") {
+		return true
+	}
+	if strings.HasSuffix(item.Url, ".zip") && strings.Contains(item.Url, "darwin") {
+		return true
+	}
+	return false
+}
+
 func (i *Installer) GetVSCode() {
 	// https://code.visualstudio.com/sha?build=stable
 	i.fetcher.SetUrl("https://code.visualstudio.com/sha?build=stable")
@@ -260,10 +279,7 @@ func (i *Installer) GetVSCode() {
 		products := &CodeProducts{}
 		if err := json.Unmarshal([]byte(content), products); err == nil {
 			for _, item := range products.Products {
-				if strings.HasSuffix(item.Url, ".zip") || strings.HasSuffix(item.Url, ".tar.gz") {
-					if strings.Contains(item.Url, "_cli") || strings.HasSuffix(item.Url, ".deb") || strings.HasSuffix(item.Url, ".rpm") {
-						continue
-					}
+				if vscodeAllowed(item) {
 					ver := &VFile{}
 					ver.Url = item.Url
 					ver.Arch = utils.ParseArch(item.Url)

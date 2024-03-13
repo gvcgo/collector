@@ -97,6 +97,11 @@ func filterGithubByUrl(dUrl string) bool {
 		"-PM4.",                               // for PHP
 		"tree-sitter.js",                      // for tree-sitter
 		"tree-sitter.wasm",                    // for tree-sitter
+		".rpm",                                // for glow, vhs
+		".gz.sbom",                            // for glow, vhs
+		".zip.sbom",                           // for glow, vhs
+		".apk",                                // for glow
+		".sha512",                             // for gleam
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {
