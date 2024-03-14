@@ -102,6 +102,13 @@ func filterGithubByUrl(dUrl string) bool {
 		".zip.sbom",                           // for glow, vhs
 		".apk",                                // for glow
 		".sha512",                             // for gleam
+		"cs-x86_64-apple-darwin.gz",           // for coursier
+		"cs-x86_64-pc-linux-container.gz",     // for coursier
+		"cs-x86_64-pc-linux-mostly-static.gz", // for soursier
+		"cs-x86_64-pc-linux-static.gz",        // for coursier
+		"cs-x86_64-pc-linux.gz",               // for coursier
+		"cs-x86_64-pc-win32.zip",              // for coursier
+		"coursier.jar",                        // for coursier
 	}
 	for _, s := range excludeList {
 		if strings.Contains(dUrl, s) {

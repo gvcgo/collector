@@ -35,4 +35,5 @@ tree-sitter/tree-sitter
 charmbracelet/vhs
 charmbracelet/glow
 gleam-lang/gleam
-jesseduffield/lazygit`
+jesseduffield/lazygit
+coursier/coursier`
