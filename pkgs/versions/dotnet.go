@@ -12,6 +12,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gvcgo/collector/pkgs/confs"
 	"github.com/gvcgo/collector/pkgs/upload"
+	"github.com/gvcgo/collector/pkgs/utils"
 	"github.com/gvcgo/goutils/pkgs/gtea/gprint"
 	"github.com/gvcgo/goutils/pkgs/request"
 )
@@ -72,6 +73,61 @@ func (d *DotNet) getDoc() {
 	}
 }
 
+func (d *DotNet) fetchVersion(vUrl, vStr string) {
+	d.fetcher.SetUrl(vUrl)
+	d.fetcher.Timeout = 180 * time.Second
+	var doc *goquery.Document
+	if resp, sCode := d.fetcher.GetString(); resp != "" && sCode == 200 {
+		var err error
+		doc, err = goquery.NewDocumentFromReader(strings.NewReader(resp))
+		if err != nil {
+			gprint.PrintError(fmt.Sprintf("Parse page errored: %+v", err))
+		}
+		if doc == nil {
+			gprint.PrintError(fmt.Sprintf("Cannot parse html for %s", d.fetcher.Url))
+			os.Exit(1)
+		}
+	} else {
+		fmt.Printf("Failed: %s, code: %d", d.homepage, sCode)
+	}
+	link := doc.Find("a#directLink").AttrOr("href", "")
+	sha512Str := doc.Find("input#checksum").AttrOr("value", "")
+	sumType := "SHA512"
+	if sha512Str == "" {
+		sumType = sha512Str
+	}
+	if _, ok := d.versions[vStr]; !ok {
+		d.versions[vStr] = []*VFile{}
+	}
+	d.versions[vStr] = append(d.versions[vStr], &VFile{
+		Url:     link,
+		Sum:     sha512Str,
+		SumType: sumType,
+		Arch:    utils.ParseArch(vUrl),
+		Os:      utils.ParsePlatform(vUrl),
+	})
+}
+
+func filterDotNetSDKByUrl(vUrl string) bool {
+	if vUrl == "" {
+		return false
+	}
+	excludeList := []string{
+		"alpine",
+		"installer",
+		"winget",
+		"arm32",
+		"install",
+		"scripts",
+	}
+	for _, ee := range excludeList {
+		if strings.Contains(vUrl, ee) {
+			return false
+		}
+	}
+	return true
+}
+
 func (d *DotNet) FetchAll() {
 	d.getDoc()
 	if d.doc == nil {
@@ -85,6 +141,7 @@ func (d *DotNet) FetchAll() {
 		}
 		supportedVersionUrls = append(supportedVersionUrls, u)
 	})
+
 	for _, u := range supportedVersionUrls {
 		d.doc = nil
 		d.homepage = u
@@ -92,10 +149,19 @@ func (d *DotNet) FetchAll() {
 		if d.doc == nil {
 			continue
 		}
+
+		vInfo := d.doc.Find("div.download-panel").Find("div").Find("table").Eq(0).Find("caption").AttrOr("id", "")
+		vList := strings.Split(vInfo, "-sdk-")
+		vStr := vList[len(vList)-1]
 		// //div[@class="download-panel"]//div//table[1]
 		d.doc.Find("div.download-panel").Find("div").Find("table").Eq(0).Find("a").Each(func(_ int, s *goquery.Selection) {
 			uu := s.AttrOr("href", "")
-			fmt.Println(uu)
+			if filterDotNetSDKByUrl(uu) {
+				if !strings.Contains(uu, d.host) {
+					uu, _ = url.JoinPath(d.host, uu)
+				}
+				d.fetchVersion(uu, vStr)
+			}
 		})
 	}
 }

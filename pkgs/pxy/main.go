@@ -77,4 +77,5 @@ func main() {
 
 	dn := versions.NewDotNet(cfg)
 	dn.FetchAll()
+	dn.Upload()
 }
