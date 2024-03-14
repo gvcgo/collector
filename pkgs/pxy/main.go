@@ -1,14 +1,21 @@
 package main
 
+import (
+	"os"
+
+	"github.com/gvcgo/collector/pkgs/confs"
+	"github.com/gvcgo/collector/pkgs/versions"
+)
+
 func main() {
 	// sites.TestEDomains()
 	// sites.TestEDCollector()
 	// sites.TestTDomains()
-	// os.Setenv(confs.ToEnableProxyEnvName, "true")
-	app := NewApp()
-	app.Run()
+	os.Setenv(confs.ToEnableProxyEnvName, "true")
+	// app := NewApp()
+	// app.Run()
 
-	// cfg := confs.NewCollectorConf()
+	cfg := confs.NewCollectorConf()
 	// aj := versions.NewAdoptiumJDK(cfg)
 	// aj.FetchAll()
 	// aj.Upload()
@@ -67,4 +74,7 @@ func main() {
 	// scala := versions.NewScala(cfg)
 	// scala.FetchAll()
 	// scala.Upload()
+
+	dn := versions.NewDotNet(cfg)
+	dn.FetchAll()
 }
