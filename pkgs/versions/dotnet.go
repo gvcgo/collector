@@ -69,7 +69,7 @@ func (d *DotNet) getDoc() {
 			os.Exit(1)
 		}
 	} else {
-		fmt.Printf("Failed: %s, code: %d", d.homepage, sCode)
+		fmt.Printf("Failed: %s, code: %d\n", d.homepage, sCode)
 	}
 }
 
@@ -88,8 +88,10 @@ func (d *DotNet) fetchVersion(vUrl, vStr string) {
 			os.Exit(1)
 		}
 	} else {
-		fmt.Printf("Failed: %s, code: %d", d.homepage, sCode)
+		fmt.Printf("Failed: %s, code: %d\n", d.homepage, sCode)
+		return
 	}
+
 	link := doc.Find("a#directLink").AttrOr("href", "")
 	sha512Str := doc.Find("input#checksum").AttrOr("value", "")
 	sumType := "SHA512"
@@ -149,20 +151,39 @@ func (d *DotNet) FetchAll() {
 		if d.doc == nil {
 			continue
 		}
-
-		vInfo := d.doc.Find("div.download-panel").Find("div").Find("table").Eq(0).Find("caption").AttrOr("id", "")
-		vList := strings.Split(vInfo, "-sdk-")
-		vStr := vList[len(vList)-1]
 		// //div[@class="download-panel"]//div//table[1]
-		d.doc.Find("div.download-panel").Find("div").Find("table").Eq(0).Find("a").Each(func(_ int, s *goquery.Selection) {
-			uu := s.AttrOr("href", "")
-			if filterDotNetSDKByUrl(uu) {
-				if !strings.Contains(uu, d.host) {
-					uu, _ = url.JoinPath(d.host, uu)
-				}
-				d.fetchVersion(uu, vStr)
+		d.doc.Find("div.download-panel").Find("div").Find("table").Each(func(i int, ss *goquery.Selection) {
+			vInfo := ss.Find("caption").AttrOr("id", "")
+			vList := strings.Split(vInfo, "-sdk-")
+			if len(vList) < 2 {
+				return
 			}
+			vName := vList[len(vList)-1]
+			ss.Find("a").Each(func(i int, sa *goquery.Selection) {
+				uu := sa.AttrOr("href", "")
+				if filterDotNetSDKByUrl(uu) {
+					// fmt.Println(uu)
+					if !strings.Contains(uu, d.host) {
+						uu, _ = url.JoinPath(d.host, uu)
+					}
+					d.fetchVersion(uu, vName)
+				}
+			})
 		})
+
+		// vInfo := d.doc.Find("div.download-panel").Find("div").Find("table").Eq(0).Find("caption").AttrOr("id", "")
+		// vList := strings.Split(vInfo, "-sdk-")
+		// vStr := vList[len(vList)-1]
+		// // //div[@class="download-panel"]//div//table[1]
+		// d.doc.Find("div.download-panel").Find("div").Find("table").Eq(0).Find("a").Each(func(_ int, s *goquery.Selection) {
+		// 	uu := s.AttrOr("href", "")
+		// 	if filterDotNetSDKByUrl(uu) {
+		// 		if !strings.Contains(uu, d.host) {
+		// 			uu, _ = url.JoinPath(d.host, uu)
+		// 		}
+		// 		d.fetchVersion(uu, vStr)
+		// 	}
+		// })
 	}
 }
 
