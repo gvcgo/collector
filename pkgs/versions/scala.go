@@ -75,6 +75,7 @@ func (s *Scala) FetchAll() {
 	if s.doc != nil {
 		s.doc.Find("div.download-elem").Find("a").Each(func(_ int, ss *goquery.Selection) {
 			vName := strings.ReplaceAll(ss.Text(), "Scala ", "")
+			vName = strings.ReplaceAll(vName, " ", "-")
 			if _, ok := s.versions[vName]; !ok {
 				s.versions[vName] = []*VFile{
 					{
