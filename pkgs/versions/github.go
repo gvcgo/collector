@@ -81,14 +81,14 @@ func filterGithubByUrl(dUrl string) bool {
 		"-profile.zip",  // for bun
 		"denort-",       // for deno
 		// "-unknown-linux-musl.tar.gz",          // for fd.
-		"-pc-windows-gnu.zip",                 // for fd.
+		"-pc-windows-msvc.zip",                // for fd.
 		"linux-gnueabihf",                     // for fd
 		"linux-musleabihf",                    // for fd
 		"kotlin-compiler-",                    // for kotlin
 		"unknown-linux-gnueabihf.",            // for ripgrep
 		"unknown-linux-musleabi.",             // for ripgrep
 		"unknown-linux-musleabihf.",           // for ripgrep
-		"pc-windows-gnu.zip",                  // for ripgrep
+		"pc-windows-msvc.zip",                 // for ripgrep
 		"arm-unknown-linux-gnueabihf",         // for typst-lsp
 		"typst-lsp-x86_64-unknown-linux-musl", // for typst-lsp
 		"-unknown-linux-musleabi.",            // for typst
