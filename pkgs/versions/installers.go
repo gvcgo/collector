@@ -202,7 +202,7 @@ func (i *Installer) GetRustInstaller() {
 	verLinuxx64 := &VFile{
 		Url:   "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init",
 		Arch:  "amd64",
-		Os:    "darwin",
+		Os:    "linux",
 		Extra: rVersion,
 	}
 	i.versions[name][rVersion] = append(i.versions[name][rVersion], verLinuxx64)
@@ -210,7 +210,7 @@ func (i *Installer) GetRustInstaller() {
 	verLinuxArm64 := &VFile{
 		Url:   "https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init",
 		Arch:  "arm64",
-		Os:    "darwin",
+		Os:    "linux",
 		Extra: rVersion,
 	}
 	i.versions[name][rVersion] = append(i.versions[name][rVersion], verLinuxArm64)
@@ -218,7 +218,7 @@ func (i *Installer) GetRustInstaller() {
 	verWinx64 := &VFile{
 		Url:   "https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe",
 		Arch:  "amd64",
-		Os:    "darwin",
+		Os:    "windows",
 		Extra: rVersion,
 	}
 	i.versions[name][rVersion] = append(i.versions[name][rVersion], verWinx64)
@@ -226,7 +226,7 @@ func (i *Installer) GetRustInstaller() {
 	verWinArm64 := &VFile{
 		Url:   "https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe",
 		Arch:  "arm64",
-		Os:    "darwin",
+		Os:    "windows",
 		Extra: rVersion,
 	}
 	i.versions[name][rVersion] = append(i.versions[name][rVersion], verWinArm64)
