@@ -81,14 +81,14 @@ func filterGithubByUrl(dUrl string) bool {
 		"-profile.zip",  // for bun
 		"denort-",       // for deno
 		// "-unknown-linux-musl.tar.gz",          // for fd.
-		"-pc-windows-msvc.zip",                // for fd.
+		"fd$pc-windows-msvc.zip",              // for fd.
 		"linux-gnueabihf",                     // for fd
 		"linux-musleabihf",                    // for fd
 		"kotlin-compiler-",                    // for kotlin
 		"unknown-linux-gnueabihf.",            // for ripgrep
 		"unknown-linux-musleabi.",             // for ripgrep
 		"unknown-linux-musleabihf.",           // for ripgrep
-		"pc-windows-msvc.zip",                 // for ripgrep
+		"ripgrep$pc-windows-msvc.zip",         // for ripgrep
 		"arm-unknown-linux-gnueabihf",         // for typst-lsp
 		"typst-lsp-x86_64-unknown-linux-musl", // for typst-lsp
 		"-unknown-linux-musleabi.",            // for typst
@@ -110,8 +110,14 @@ func filterGithubByUrl(dUrl string) bool {
 		"cs-x86_64-pc-win32.zip",              // for coursier
 		"coursier.jar",                        // for coursier
 	}
+
 	for _, s := range excludeList {
-		if strings.Contains(dUrl, s) {
+		if strings.Contains(s, "$") {
+			ss := strings.Split(s, "$")
+			if strings.Contains(dUrl, ss[0]) && strings.Contains(dUrl, ss[1]) {
+				return false
+			}
+		} else if strings.Contains(dUrl, s) {
 			return false
 		}
 	}
@@ -143,6 +149,9 @@ func (g *GithubRepo) fetchRepo(repo string) {
 					ver := &VFile{}
 					ver.Url = asset.Url
 					if filterGithubByUrl(asset.Url) {
+						// if strings.Contains(asset.Url, "typst-") && strings.Contains(asset.Url, "windows") {
+						// 	fmt.Println(asset.Url)
+						// }
 						ver.Arch = utils.ParseArch(asset.Url)
 						ver.Os = utils.ParsePlatform(asset.Url)
 						for _, n := range ToFindVersionList {
