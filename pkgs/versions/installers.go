@@ -250,7 +250,8 @@ type CodeProducts struct {
 }
 
 func vscodeAllowed(item *CodeItem) bool {
-	excludeList := []string{"_cli", ".deb", ".rpm"}
+	// excludeList := []string{"_cli", ".deb", ".rpm"}
+	excludeList := []string{"_cli", ".tar.gz", "armhf", "armv7hl"}
 	for _, excludeStr := range excludeList {
 		if strings.Contains(item.Url, excludeStr) {
 			return false
@@ -263,6 +264,9 @@ func vscodeAllowed(item *CodeItem) bool {
 		return true
 	}
 	if strings.HasSuffix(item.Url, ".zip") && strings.Contains(item.Url, "darwin") {
+		return true
+	}
+	if strings.HasSuffix(item.Url, ".deb") || strings.HasSuffix(item.Url, ".rpm") {
 		return true
 	}
 	return false
