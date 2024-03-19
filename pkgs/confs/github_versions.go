@@ -36,4 +36,5 @@ charmbracelet/vhs
 charmbracelet/glow
 gleam-lang/gleam
 jesseduffield/lazygit
-coursier/coursier`
+coursier/coursier
+Enter-tainer/typst-preview`

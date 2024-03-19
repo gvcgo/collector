@@ -28,30 +28,32 @@ var ArchOSs map[string]string = map[string]string{
 }
 
 var ArchMap = map[string]string{
-	"amd64":     "amd64",
-	"x86-64":    "amd64",
-	"x86_64":    "amd64",
-	"x64":       "amd64",
-	"win64":     "amd64",
-	"64-bit":    "amd64",
-	"x86":       "386",
-	"i586":      "386",
-	"i686":      "386",
-	"i386":      "386",
-	"win32":     "386",
-	"32-bit":    "386",
-	"arm64":     "arm64",
-	"aarch64":   "arm64",
-	"aarch_64":  "arm64",
-	"arm32":     "arm",
-	"armv6":     "arm",
-	"ppc64le":   "ppc64le",
-	"ppcle_64":  "ppc64le",
-	"s390x":     "s390x",
-	"s390_64":   "s390x",
-	"powerpc64": "ppc64",
-	"ppc64":     "ppc64",
-	"universal": "universal",
+	"win32-arm64": "arm64",
+	"amd64":       "amd64",
+	"x86-64":      "amd64",
+	"x86_64":      "amd64",
+	"x64":         "amd64",
+	"win64":       "amd64",
+	"64-bit":      "amd64",
+	"ia32":        "386",
+	"x86":         "386",
+	"i586":        "386",
+	"i686":        "386",
+	"i386":        "386",
+	"win32":       "386",
+	"32-bit":      "386",
+	"arm64":       "arm64",
+	"aarch64":     "arm64",
+	"aarch_64":    "arm64",
+	"arm32":       "arm",
+	"armv6":       "arm",
+	"ppc64le":     "ppc64le",
+	"ppcle_64":    "ppc64le",
+	"s390x":       "s390x",
+	"s390_64":     "s390x",
+	"powerpc64":   "ppc64",
+	"ppc64":       "ppc64",
+	"universal":   "universal",
 }
 
 var PlatformMap = map[string]string{
@@ -87,7 +89,10 @@ const (
 func ParseArch(name string) string {
 	name = strings.ToLower(name)
 	if strings.Contains(name, "win32-x64") {
-		return "any"
+		return "amd64"
+	}
+	if strings.Contains(name, "win32-arm64") {
+		return "arm64"
 	}
 	for k, v := range ArchMap {
 		if k == "x86" && strings.Contains(name, k) && (strings.Contains(name, "x86_64") || strings.Contains(name, "x86-64")) {

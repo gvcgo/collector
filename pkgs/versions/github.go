@@ -109,6 +109,12 @@ func filterGithubByUrl(dUrl string) bool {
 		"cs-x86_64-pc-linux.gz",               // for coursier
 		"cs-x86_64-pc-win32.zip",              // for coursier
 		"coursier.jar",                        // for coursier
+		"typst-preview$index.html",
+		"typst-preview$.debug",
+		"typst-preview$.dwarf",
+		"typst-preview$.pdb",
+		"typst-preview$alpine",
+		"typst-preview$armhf",
 	}
 
 	for _, s := range excludeList {
