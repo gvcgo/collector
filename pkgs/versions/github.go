@@ -115,6 +115,8 @@ func filterGithubByUrl(dUrl string) bool {
 		"typst-preview$.pdb",
 		"typst-preview$alpine",
 		"typst-preview$armhf",
+		"agg$-gnueabihf",
+		"agg$-musl",
 	}
 
 	for _, s := range excludeList {

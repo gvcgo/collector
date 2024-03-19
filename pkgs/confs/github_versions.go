@@ -37,4 +37,5 @@ charmbracelet/glow
 gleam-lang/gleam
 jesseduffield/lazygit
 coursier/coursier
-Enter-tainer/typst-preview`
+Enter-tainer/typst-preview
+asciinema/agg`
