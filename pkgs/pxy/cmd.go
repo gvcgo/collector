@@ -216,6 +216,10 @@ func (a *App) initiate() {
 			// zig
 			fmt.Println("zig...")
 			verList = append(verList, versions.NewZig(a.cnf))
+			// kubectl
+			fmt.Println("kubectl...")
+			verList = append(verList, versions.NewKubectl(a.cnf))
+
 			for _, ver := range verList {
 				ver.FetchAll()
 				ver.Upload()

@@ -71,4 +71,8 @@ func main() {
 	// dn := versions.NewDotNet(cfg)
 	// dn.FetchAll()
 	// dn.Upload()
+
+	// kctl := versions.NewKubectl(cfg)
+	// kctl.FetchAll()
+	// kctl.Upload()
 }
