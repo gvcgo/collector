@@ -213,6 +213,9 @@ func (a *App) initiate() {
 			// python
 			fmt.Println("python...")
 			verList = append(verList, versions.NewPython(a.cnf))
+			// pypy
+			fmt.Println("pypy...")
+			verList = append(verList, versions.NewPyPy(a.cnf))
 			// zig
 			fmt.Println("zig...")
 			verList = append(verList, versions.NewZig(a.cnf))

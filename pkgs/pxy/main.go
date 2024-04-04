@@ -9,6 +9,11 @@ func main() {
 	app.Run()
 
 	// cfg := confs.NewCollectorConf()
+
+	// pypy := versions.NewPyPy(cfg)
+	// pypy.FetchAll()
+	// pypy.Upload()
+
 	// aj := versions.NewAdoptiumJDK(cfg)
 	// aj.FetchAll()
 	// aj.Upload()
