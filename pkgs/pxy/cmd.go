@@ -193,7 +193,9 @@ func (a *App) initiate() {
 			// gradle
 			fmt.Println("gradle...")
 			verList = append(verList, versions.NewGradle(a.cnf))
-
+			// groovy
+			fmt.Println("groovy...")
+			verList = append(verList, versions.NewGroovy(a.cnf))
 			// java
 			fmt.Println("java...")
 			// verList = append(verList, versions.NewJDK(a.cnf))
