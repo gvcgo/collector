@@ -1,25 +1,18 @@
 package main
 
-import (
-	"os"
-
-	"github.com/gvcgo/collector/pkgs/confs"
-	"github.com/gvcgo/collector/pkgs/versions"
-)
-
 func main() {
 	// sites.TestEDomains()
 	// sites.TestEDCollector()
 	// sites.TestTDomains()
-	os.Setenv(confs.ToEnableProxyEnvName, "true")
-	// app := NewApp()
-	// app.Run()
+	// os.Setenv(confs.ToEnableProxyEnvName, "true")
+	app := NewApp()
+	app.Run()
 
-	cfg := confs.NewCollectorConf()
+	// cfg := confs.NewCollectorConf()
 
-	gr := versions.NewGroovy(cfg)
-	gr.FetchAll()
-	gr.Upload()
+	// gr := versions.NewGroovy(cfg)
+	// gr.FetchAll()
+	// gr.Upload()
 
 	// pypy := versions.NewPyPy(cfg)
 	// pypy.FetchAll()
