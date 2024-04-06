@@ -41,6 +41,7 @@ https://github.com/nvarner/typst-lsp
 https://github.com/vlang/v
 https://github.com/v-analyzer/v-analyzer
 https://github.com/oven-sh/bun
+https://github.com/gvcgo/asciinema
 */
 type GithubRepo struct {
 	cnf      *confs.CollectorConf
