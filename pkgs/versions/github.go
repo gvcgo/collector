@@ -118,6 +118,16 @@ func filterGithubByUrl(dUrl string) bool {
 		"typst-preview$armhf",
 		"agg$-gnueabihf",
 		"agg$-musl",
+		"upx$src",
+		"upx$armeb",
+		"upx$a.zip",
+		"upx$d.zip",
+		"upx$w.zip",
+		"upx$wce.zip",
+		"upx$mips",
+		"upx$powerpc",
+		"upx$dos",
+		"upx$arm_linux",
 	}
 
 	for _, s := range excludeList {

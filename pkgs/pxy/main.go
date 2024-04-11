@@ -10,6 +10,10 @@ func main() {
 
 	// cfg := confs.NewCollectorConf()
 
+	// gh := versions.NewGithubRepo(cfg)
+	// gh.FetchAll()
+	// gh.Upload()
+
 	// gr := versions.NewGroovy(cfg)
 	// gr.FetchAll()
 	// gr.Upload()
@@ -68,10 +72,6 @@ func main() {
 	// ins.GetMiniconda()
 	// ins.FetchAll()
 	// ins.Upload()
-
-	// gh := versions.NewGithubRepo(cfg)
-	// gh.FetchAll()
-	// gh.Upload()
 
 	// scala := versions.NewScala(cfg)
 	// scala.FetchAll()

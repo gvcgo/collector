@@ -39,4 +39,5 @@ jesseduffield/lazygit
 coursier/coursier
 Enter-tainer/typst-preview
 asciinema/agg
-gvcgo/asciinema`
+gvcgo/asciinema
+upx/upx`
