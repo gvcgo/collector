@@ -40,4 +40,5 @@ coursier/coursier
 Enter-tainer/typst-preview
 asciinema/agg
 gvcgo/asciinema
-upx/upx`
+upx/upx
+odin-lang/Odin`

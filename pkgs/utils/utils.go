@@ -66,6 +66,7 @@ var PlatformMap = map[string]string{
 	"win":     Windows,
 	"osx":     MacOS,
 	"linux":   Linux,
+	"ubuntu":  Linux,
 	"windows": Windows,
 	"freebsd": "freebsd",
 	"aix":     "aix",
