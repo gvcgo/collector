@@ -153,6 +153,9 @@ func (g *GithubRepo) fetchRepo(repo string) {
 	if strings.HasPrefix(name, "PHP-") {
 		name = "php"
 	}
+	if name == "Odin" {
+		name = "odin"
+	}
 	versions := Versions{}
 
 	content := g.uploader.GetGithubReleaseList(repo)
