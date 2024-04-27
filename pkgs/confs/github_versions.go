@@ -41,4 +41,5 @@ Enter-tainer/typst-preview
 asciinema/agg
 gvcgo/asciinema
 upx/upx
-odin-lang/Odin`
+odin-lang/Odin
+Pure-D/serve-d`

@@ -140,12 +140,12 @@ func (g *Groovy) FetchAll() {
 	})
 }
 
-func (s *Groovy) Upload() {
-	if len(s.versions) > 0 {
-		fPath := filepath.Join(s.cnf.DirPath(), GroovyVersionFileName)
-		if content, err := json.MarshalIndent(s.versions, "", "  "); err == nil && content != nil {
+func (g *Groovy) Upload() {
+	if len(g.versions) > 0 {
+		fPath := filepath.Join(g.cnf.DirPath(), GroovyVersionFileName)
+		if content, err := json.MarshalIndent(g.versions, "", "  "); err == nil && content != nil {
 			os.WriteFile(fPath, content, os.ModePerm)
-			s.uploader.Upload(fPath)
+			g.uploader.Upload(fPath)
 		}
 	}
 }

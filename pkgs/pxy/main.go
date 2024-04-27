@@ -1,14 +1,23 @@
 package main
 
+import (
+	"github.com/gvcgo/collector/pkgs/confs"
+	"github.com/gvcgo/collector/pkgs/versions"
+)
+
 func main() {
 	// sites.TestEDomains()
 	// sites.TestEDCollector()
 	// sites.TestTDomains()
 	// os.Setenv(confs.ToEnableProxyEnvName, "true")
-	app := NewApp()
-	app.Run()
+	// app := NewApp()
+	// app.Run()
 
-	// cfg := confs.NewCollectorConf()
+	cfg := confs.NewCollectorConf()
+
+	dl := versions.NewDlang(cfg)
+	dl.FetchAll()
+	dl.Upload()
 
 	// gh := versions.NewGithubRepo(cfg)
 	// gh.FetchAll()

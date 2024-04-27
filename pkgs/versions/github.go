@@ -128,6 +128,7 @@ func filterGithubByUrl(dUrl string) bool {
 		"upx$powerpc",
 		"upx$dos",
 		"upx$arm_linux",
+		"serve-d$.tar.xz",
 	}
 
 	for _, s := range excludeList {
@@ -156,6 +157,7 @@ func (g *GithubRepo) fetchRepo(repo string) {
 	if name == "Odin" {
 		name = "odin"
 	}
+
 	versions := Versions{}
 
 	content := g.uploader.GetGithubReleaseList(repo)
