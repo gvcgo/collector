@@ -128,7 +128,6 @@ func filterGithubByUrl(dUrl string) bool {
 		"upx$powerpc",
 		"upx$dos",
 		"upx$arm_linux",
-		"serve-d$.tar.xz",
 	}
 
 	for _, s := range excludeList {
